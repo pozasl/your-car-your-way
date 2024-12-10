@@ -1,0 +1,51 @@
+enum Role {
+    USER,
+    CS,
+    ADMIN
+}
+
+type Query {
+    userById(id: ID!): User
+}
+
+type User {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    birthDate: Date!
+    address: Address!
+    roles: [Role]
+}
+
+type Agency {
+    id: ID!
+    name: String!
+    address: Address!
+    vehicules: [Vehicule]
+}
+
+type Address {
+    id: ID!
+    street: String!
+    city: String!
+    state: String
+    zipCode: String!
+    country: String!
+    timeZone: String!
+}
+
+type Vehicule {
+    id: ID!
+    regNumber: String!
+    category: VehiculeCategory
+}
+
+type VehiculeCategory {
+    ref: String!
+    name: String!
+}
+
+scalar Date
+scalar DateTime
