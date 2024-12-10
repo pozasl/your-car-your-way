@@ -6,6 +6,9 @@ import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 
 import graphql.scalars.ExtendedScalars;
 
+/**
+ * Configure GraphQl DGS with Extended Scalars
+ */
 @Configuration
 public class GraphQlConfig {
     @Bean
