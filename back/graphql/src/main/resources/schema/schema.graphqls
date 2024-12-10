@@ -4,6 +4,27 @@ enum Role {
     ADMIN
 }
 
+enum VehiculeCategoryRef {
+    M,
+    N,
+    E,
+    H,
+    C,
+    D,
+    I,
+    J,
+    S,
+    R,
+    F,
+    G,
+    P,
+    U,
+    L,
+    W,
+    O,
+    X
+}
+
 type Query {
     userById(id: ID!): User
 }
@@ -16,7 +37,7 @@ type User {
     password: String!
     birthDate: Date!
     address: Address!
-    roles: [Role]
+    roles: [Role]!
 }
 
 type Agency {
@@ -43,7 +64,7 @@ type Vehicule {
 }
 
 type VehiculeCategory {
-    ref: String!
+    ref: VehiculeCategoryRef
     name: String!
 }
 
