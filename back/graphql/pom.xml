@@ -39,6 +39,11 @@
 			<groupId>com.netflix.graphql.dgs</groupId>
 			<artifactId>graphql-dgs-spring-graphql-starter</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.graphql-java</groupId>
+			<artifactId>graphql-java-extended-scalars</artifactId>
+			<version>22.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -82,10 +87,14 @@
 						</goals>
 						<configuration>
 							<schemaPaths>
-								<param>src/main/resources/graphql-client</param>
+								<param>src/main/resources/schema</param>
 							</schemaPaths>
-							<packageName>com.ycyw.graphql.codegen</packageName>
-							<addGeneratedAnnotation>true</addGeneratedAnnotation>
+							<packageName>com.ycyw.graphql.generated</packageName>
+							<addGeneratedAnnotation>false</addGeneratedAnnotation>
+							<typeMapping>
+								<BigDecimal>java.math.BigDecimal</BigDecimal>
+								<Date>java.time.LocalDateTime</Date>
+							</typeMapping>
 						</configuration>
 					</execution>
 				</executions>
