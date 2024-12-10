@@ -1,20 +1,21 @@
-package com.ycyw.graphql.configuration;
+package com.ycyw.graphql.scalar;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
+
+import com.netflix.graphql.dgs.DgsComponent;
 
 import graphql.scalars.ExtendedScalars;
 
 /**
- * Configure GraphQl DGS with Extended Scalars
+ * Add Date and DateTime extended scalars
  */
-@Configuration
-public class GraphQlConfig {
+@DgsComponent
+public class DateTimeScalar {
     @Bean
     public RuntimeWiringConfigurer runtimeWiringConfigurer() {
         return wiringBuilder -> wiringBuilder
-            .scalar(ExtendedScalars.Date)
-            .scalar(ExtendedScalars.DateTime);
+                .scalar(ExtendedScalars.Date)
+                .scalar(ExtendedScalars.DateTime);
     }
 }
