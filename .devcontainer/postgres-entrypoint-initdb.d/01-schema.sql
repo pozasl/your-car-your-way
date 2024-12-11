@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS address(
 CREATE INDEX IF NOT EXISTS city_index ON address(city);
 CREATE INDEX IF NOT EXISTS zipcode_index ON address(zipcode);
 
--- user_address junction table
+-- users/address junction table
 CREATE TABLE IF NOT EXISTS users_address(
     user_id BIGSERIAL REFERENCES users(id) NOT NULL,
     address_id BIGSERIAL REFERENCES address(id) NOT NULL,
