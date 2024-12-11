@@ -34,7 +34,7 @@ public class UserDataFetcher {
         parentType = DgsConstants.QUERY_TYPE,
         field = QUERY.UserById
     )
-    public Mono<User> cc(@InputArgument("id") String id) {
+    public Mono<User> userById(@InputArgument("id") String id) {
         if (Strings.isBlank(id)) {
             new RuntimeException("Invalid Product ID.");
         }
