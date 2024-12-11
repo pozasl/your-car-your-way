@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
+import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.InputArgument;
 import com.ycyw.graphql.generated.DgsConstants;
+import com.ycyw.graphql.generated.DgsConstants.MUTATION;
 import com.ycyw.graphql.generated.DgsConstants.QUERY;
+import com.ycyw.graphql.generated.types.NewUser;
 import com.ycyw.graphql.generated.types.User;
 import com.ycyw.graphql.service.UserService;
 
@@ -40,4 +43,13 @@ public class UserDataFetcher {
         }
         return userService.getUser(id);
     }
+
+    @DgsMutation(
+        field = MUTATION.CreateUser
+    )
+    public Mono<User> createUser(@InputArgument("user") NewUser user) {
+        return userService.createUser(user);
+    }
+
+
 }
