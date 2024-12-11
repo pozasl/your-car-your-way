@@ -1,8 +1,9 @@
 package com.ycyw.graphql.repository;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
@@ -88,7 +89,7 @@ public class UserRepositoryImpl implements UserRepository{
             .firstName(row.get("firstname").toString())
             .lastName(row.get("lastname").toString())
             .password(row.get("pasword").toString())
-            .birthDate(LocalDateTime.parse(row.get("birthdate").toString()))
+            .birthDate(OffsetDateTime.parse(row.get("birthdate").toString()))
             .roles(List.of(Role.valueOf(row.get("roles").toString())))
             .address(address)
             .build());
@@ -96,14 +97,14 @@ public class UserRepositoryImpl implements UserRepository{
 
     private Mono<User> saveUser(User user) {
         if (user.getId() == null) {
-            return client.sql("INSERT INTO users(email, firstname, lastname, password, birthdate, roles VALUES(:name, :email, :firstname, :lastname, :password, :birthdate, :roles)")
+            return client.sql("INSERT INTO users(email, firstname, lastname, password, birthdate, roles) VALUES (:email, :firstname, :lastname, :password, :birthdate, :roles)")
                     .bind("email", user.getEmail())
                     .bind("firstname", user.getFirstName())
                     .bind("lastname", user.getLastName())
                     // TODO: Encode password
                     .bind("password", user.getPassword())
                     .bind("birthdate", user.getBirthDate())
-                    .bind("roles", user.getRoles())
+                    .bind("roles", String.join(",", user.getRoles().stream().map(r -> r.toString()).collect(Collectors.toList())))
                     .filter((statement, executeFunction) -> statement.returnGeneratedValues("id").execute())
                     .fetch().first()
                     .doOnNext(result -> user.setId(result.get("id").toString()))

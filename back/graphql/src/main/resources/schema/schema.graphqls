@@ -38,7 +38,7 @@ input NewUser {
     lastName: String!
     email: String!
     password: String!
-    birthDate: Date!
+    birthDate: DateTime!
     address: NewAddress!
 }
 
@@ -46,18 +46,18 @@ input NewAddress {
     street: String!
     city: String!
     state: String
-    zipCode: String!
+    zipcode: String!
     country: String!
-    timeZone: String!
+    timezone: String!
 }
 
-type User {
+type User @key(fields: "id"){
     id: ID!
     firstName: String!
     lastName: String!
     email: String!
     password: String!
-    birthDate: Date!
+    birthDate: DateTime!
     address: Address!
     roles: [Role]!
     createdAt: DateTime
@@ -66,30 +66,30 @@ type User {
 
 
 
-type Agency {
+type Agency @key(fields: "id"){
     id: ID!
     name: String!
     address: Address!
     vehicules: [Vehicule]
 }
 
-type Address {
+type Address @key(fields: "id"){
     id: ID!
     street: String!
     city: String!
     state: String
-    zipCode: String!
+    zipcode: String!
     country: String!
-    timeZone: String!
+    timezone: String!
 }
 
-type Vehicule {
+type Vehicule @key(fields: "id"){
     id: ID!
     regNumber: String!
     category: VehiculeCategory
 }
 
-type VehiculeCategory {
+type VehiculeCategory @key(fields: "ref"){
     ref: VehiculeCategoryRef
     name: String!
 }
