@@ -38,6 +38,8 @@ type User {
     birthDate: Date!
     address: Address!
     roles: [Role]!
+    createdAt: DateTime
+    updatedAt: DateTime
 }
 
 type Agency {
