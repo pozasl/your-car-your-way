@@ -29,6 +29,28 @@ type Query {
     userById(id: ID!): User
 }
 
+type Mutation {
+    createUser(user: NewUser!): User
+}
+
+input NewUser {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    birthDate: Date!
+    address: NewAddress!
+}
+
+input NewAddress {
+    street: String!
+    city: String!
+    state: String
+    zipCode: String!
+    country: String!
+    timeZone: String!
+}
+
 type User {
     id: ID!
     firstName: String!
@@ -41,6 +63,8 @@ type User {
     createdAt: DateTime
     updatedAt: DateTime
 }
+
+
 
 type Agency {
     id: ID!
