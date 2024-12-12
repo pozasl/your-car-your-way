@@ -27,10 +27,11 @@ enum VehiculeCategoryRef {
 
 type Query {
     userById(id: ID!): User
+    users: [User]
 }
 
 type Mutation {
-    createUser(user: NewUser!): User
+    addUser(user: NewUser!): User
 }
 
 input NewUser {

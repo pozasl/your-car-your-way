@@ -14,6 +14,7 @@ import com.ycyw.graphql.generated.types.NewUser;
 import com.ycyw.graphql.generated.types.User;
 import com.ycyw.graphql.service.UserService;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -29,7 +30,8 @@ public class UserDataFetcher {
     }
 
     /**
-     * userById query
+     * Get a user by its id
+     *
      * @param id
      * @return
      */
@@ -44,10 +46,27 @@ public class UserDataFetcher {
         return userService.getUser(id);
     }
 
-    @DgsMutation(
-        field = MUTATION.CreateUser
+    /**
+     * Get all users
+     * @return
+     */
+    @DgsData (
+        parentType = DgsConstants.QUERY_TYPE,
+        field = QUERY.Users
     )
-    public Mono<User> createUser(@InputArgument("user") NewUser user) {
+    public Flux<User> users() {
+        return userService.getUsers();
+    }
+
+    /**
+     * Add a new user
+     * @param user
+     * @return
+     */
+    @DgsMutation(
+        field = MUTATION.AddUser
+    )
+    public Mono<User> addUser(@InputArgument("user") NewUser user) {
         return userService.createUser(user);
     }
 

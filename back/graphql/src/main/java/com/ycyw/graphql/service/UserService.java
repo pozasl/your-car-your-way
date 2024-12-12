@@ -3,6 +3,7 @@ package com.ycyw.graphql.service;
 import com.ycyw.graphql.generated.types.NewUser;
 import com.ycyw.graphql.generated.types.User;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -24,4 +25,6 @@ public interface UserService {
      * @return the saved user;
      */
     Mono<User> createUser(NewUser user);
+
+    Flux<User> getUsers();
 }

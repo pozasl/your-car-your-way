@@ -9,6 +9,7 @@ import com.ycyw.graphql.generated.types.User;
 import com.ycyw.graphql.mapper.UserEntityMapper;
 import com.ycyw.graphql.repository.UserRepository;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -35,6 +36,11 @@ public class UserServiceImpl implements UserService {
     public Mono<User> createUser(NewUser user) {
         UserEntity userToSave = userMapper.newUserToEntity(user);
         return this.userRepository.save(userToSave).map(userMapper::entityToUser);
+    }
+
+    @Override
+    public Flux<User> getUsers() {
+        return userRepository.findAll().map(userMapper::entityToUser);
     }
 
 }
