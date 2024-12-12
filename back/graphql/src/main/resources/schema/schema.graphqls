@@ -38,7 +38,7 @@ input NewUser {
     lastName: String!
     email: String!
     password: String!
-    birthDate: DateTime!
+    birthDate: Date!
     address: NewAddress!
 }
 
@@ -57,7 +57,7 @@ type User @key(fields: "id"){
     lastName: String!
     email: String!
     password: String!
-    birthDate: DateTime!
+    birthDate: Date!
     address: Address!
     roles: [Role]!
     createdAt: DateTime
