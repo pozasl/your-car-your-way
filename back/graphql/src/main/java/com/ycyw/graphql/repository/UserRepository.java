@@ -1,6 +1,6 @@
 package com.ycyw.graphql.repository;
 
-import com.ycyw.graphql.generated.types.User;
+import com.ycyw.graphql.entity.UserEntity;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,7 +15,7 @@ public interface UserRepository {
      * @param id User's id
      * @return User mono
      */
-    Mono<User> findById(String id);
+    Mono<UserEntity> findById(String id);
 
     /**
      * Find a user by email
@@ -23,7 +23,7 @@ public interface UserRepository {
      * @param email User's email
      * @return User mono
      */
-    Mono<User> findByEmail(String email);
+    Mono<UserEntity> findByEmail(String email);
 
 
     /**
@@ -31,7 +31,7 @@ public interface UserRepository {
      *
      * @return Users flux
      */
-    Flux<User> findAll();
+    Flux<UserEntity> findAll();
  
     /**
      * Find a user by email
@@ -39,5 +39,5 @@ public interface UserRepository {
      * @param email User's email
      * @return User mono
      */
-    Mono<User> save(User user);
+    Mono<UserEntity> save(UserEntity user);
 }
