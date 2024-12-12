@@ -75,6 +75,12 @@
 			<artifactId>r2dbc-postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -107,8 +113,7 @@
 							<packageName>com.ycyw.graphql.generated</packageName>
 							<addGeneratedAnnotation>false</addGeneratedAnnotation>
 							<typeMapping>
-								<BigDecimal>java.math.BigDecimal</BigDecimal>
-								<Date>java.time.LocalDateTime</Date>
+								<Date>java.time.LocalDate</Date>
 							</typeMapping>
 						</configuration>
 					</execution>
@@ -133,8 +138,28 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+				<annotationProcessorPaths>
+					<path>
+					<groupId>org.projectlombok</groupId>
+					<artifactId>lombok</artifactId>
+					</path>
+				</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+				<excludes>
+					<exclude>
+					<groupId>org.projectlombok</groupId>
+					<artifactId>lombok</artifactId>
+					</exclude>
+				</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
