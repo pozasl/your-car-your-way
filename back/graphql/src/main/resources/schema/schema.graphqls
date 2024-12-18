@@ -1,0 +1,133 @@
+enum Role {
+    CUSTOMER,
+    CUSTOMER_SERVICE,
+}
+
+enum BisTer {
+    BIS,
+    TER,
+}
+
+enum Title {
+    MR,
+    MRS,
+    MISS
+}
+
+enum VehiculeCategoryRef {
+    M,
+    N,
+    E,
+    H,
+    C,
+    D,
+    I,
+    J,
+    S,
+    R,
+    F,
+    G,
+    P,
+    U,
+    L,
+    W,
+    O,
+    X
+}
+
+type Query {
+    account(id: ID!): Account
+    accounts: [Account!]
+}
+
+type Mutation {
+    registerCustomer(account: NewCustomerAccountInput!): OperationResult
+    # updateAccount(account: CustomerAccountInput!): Void
+    # deleteAccount(account: CustomerAccountInput!): Void
+}
+
+input NewCustomerAccountInput {
+    title: Title!
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    birthDate: Date!
+    address: NewAddressInput!
+}
+
+input CustomerAccountInput {
+    id: ID!
+    title: Title!
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    role: Role!
+    birthDate: Date!
+    address: NewAddressInput!
+}
+
+input NewAddressInput {
+    streetNumber: Int!
+    bisTer: BisTer
+    streetType: String!
+    streetName: String!
+    city: String!
+    postalCode: String!
+    region: String
+    countryCode: String!
+}
+
+type Account @key(fields: "id"){
+    id: ID!
+    title: Title!
+    firstName: String!
+    lastName: String!
+    email: String!
+    birthDate: Date!
+    address: Address!
+    role: Role!
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+
+
+type Agency @key(fields: "id"){
+    id: ID!
+    name: String!
+    address: Address!
+    vehicules: [Vehicule]
+}
+
+type Address @key(fields: "id"){
+    id: ID!
+    streetNumber: Int!
+    bisTer: BisTer
+    streetType: String!
+    streetName: String!
+    city: String!
+    postalCode: String!
+    region: String
+    countryCode: String!
+}
+
+type Vehicule @key(fields: "registrationNumber"){
+    registrationNumber: String!
+    category: VehiculeCategory!
+    available: Boolean!
+}
+
+type VehiculeCategory @key(fields: "ref"){
+    ref: VehiculeCategoryRef
+    name: String!
+}
+
+type OperationResult {
+    message: String!
+}
+
+scalar CountryCode
+scalar Date
+scalar DateTime
