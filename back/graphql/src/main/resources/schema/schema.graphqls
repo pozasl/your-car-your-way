@@ -1,7 +1,17 @@
 enum Role {
-    USER,
-    CS,
-    ADMIN
+    CUSTOMER,
+    CUSTOMER_SERVICE,
+}
+
+enum BisTer {
+    BIS,
+    TER,
+}
+
+enum Title {
+    MR,
+    MRS,
+    MISS
 }
 
 enum VehiculeCategoryRef {
@@ -26,41 +36,58 @@ enum VehiculeCategoryRef {
 }
 
 type Query {
-    userById(id: ID!): User
-    users: [User]
+    account(id: ID!): Account
+    accounts: [Account!]
 }
 
 type Mutation {
-    addUser(user: NewUser!): User
+    registerCustomer(account: NewCustomerAccountInput!): OperationResult
+    # updateAccount(account: CustomerAccountInput!): Void
+    # deleteAccount(account: CustomerAccountInput!): Void
 }
 
-input NewUser {
+input NewCustomerAccountInput {
+    title: Title!
     firstName: String!
     lastName: String!
     email: String!
     password: String!
     birthDate: Date!
-    address: NewAddress!
+    address: NewAddressInput!
 }
 
-input NewAddress {
-    street: String!
-    city: String!
-    state: String
-    zipcode: String!
-    country: String!
-    timezone: String!
-}
-
-type User @key(fields: "id"){
+input CustomerAccountInput {
     id: ID!
+    title: Title!
     firstName: String!
     lastName: String!
     email: String!
     password: String!
+    role: Role!
+    birthDate: Date!
+    address: NewAddressInput!
+}
+
+input NewAddressInput {
+    streetNumber: Int!
+    bisTer: BisTer
+    streetType: String!
+    streetName: String!
+    city: String!
+    postalCode: String!
+    region: String
+    countryCode: String!
+}
+
+type Account @key(fields: "id"){
+    id: ID!
+    title: Title!
+    firstName: String!
+    lastName: String!
+    email: String!
     birthDate: Date!
     address: Address!
-    roles: [Role]!
+    role: Role!
     createdAt: DateTime
     updatedAt: DateTime
 }
@@ -76,18 +103,20 @@ type Agency @key(fields: "id"){
 
 type Address @key(fields: "id"){
     id: ID!
-    street: String!
+    streetNumber: Int!
+    bisTer: BisTer
+    streetType: String!
+    streetName: String!
     city: String!
-    state: String
-    zipcode: String!
-    country: String!
-    timezone: String!
+    postalCode: String!
+    region: String
+    countryCode: String!
 }
 
-type Vehicule @key(fields: "id"){
-    id: ID!
-    regNumber: String!
-    category: VehiculeCategory
+type Vehicule @key(fields: "registrationNumber"){
+    registrationNumber: String!
+    category: VehiculeCategory!
+    available: Boolean!
 }
 
 type VehiculeCategory @key(fields: "ref"){
@@ -95,5 +124,10 @@ type VehiculeCategory @key(fields: "ref"){
     name: String!
 }
 
+type OperationResult {
+    message: String!
+}
+
+scalar CountryCode
 scalar Date
 scalar DateTime

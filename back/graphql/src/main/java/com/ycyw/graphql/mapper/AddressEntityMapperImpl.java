@@ -4,19 +4,22 @@ import org.springframework.stereotype.Component;
 
 import com.ycyw.graphql.entity.AddressEntity;
 import com.ycyw.graphql.generated.types.Address;
-import com.ycyw.graphql.generated.types.NewAddress;
+import com.ycyw.graphql.generated.types.NewAddressInput;
 
 @Component
 public class AddressEntityMapperImpl implements AddressEntityMapper {
 
     @Override
-    public AddressEntity newAddressToEntity(NewAddress address) {
+    public AddressEntity newAddressToEntity(NewAddressInput address) {
         return AddressEntity.builder()
-                .street(address.getStreet())
+                .streetNumber(address.getStreetNumber())
+                .bisTer(address.getBisTer())
+                .streetType(address.getStreetType())
+                .streetName(address.getStreetName())
                 .city(address.getCity())
-                .zipcode(address.getZipcode())
-                .state(address.getState())
-                .country(address.getCountry())
+                .postalCode(address.getPostalCode())
+                .region(address.getRegion())
+                .countryCode(address.getCountryCode())
                 .build();
     }
 
@@ -24,11 +27,14 @@ public class AddressEntityMapperImpl implements AddressEntityMapper {
     public Address entityToAddress(AddressEntity entity) {
         return Address.newBuilder()
                 .id(entity.getId().toString())
-                .street(entity.getStreet())
+                .streetNumber(entity.getStreetNumber())
+                .bisTer(entity.getBisTer())
+                .streetType(entity.getStreetType())
+                .streetName(entity.getStreetName())
                 .city(entity.getCity())
-                .zipcode(entity.getZipcode())
-                .state(entity.getState())
-                .country(entity.getCountry())
+                .postalCode(entity.getPostalCode())
+                .region(entity.getRegion())
+                .countryCode(entity.getCountryCode())
                 .build();
     }
 

@@ -1,37 +1,31 @@
--- user table
-CREATE TABLE IF NOT EXISTS users (
-    id BIGSERIAL PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
-    firstname VARCHAR(255) NOT NULL,
-    lastname VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    birthdate DATE NOT NULL,
-    roles VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS email_index ON users(email);
-
 -- address table
 CREATE TABLE IF NOT EXISTS address(
     id BIGSERIAL PRIMARY KEY,
-    street VARCHAR(1000) NOT NULL,
+    street_number INT NOT NULL,
+    bis_ter CHAR(3),
+    street_type VARCHAR(25) NOT NULL,
+    street_name VARCHAR(255) NOT NULL,
+    complement VARCHAR(255),
     city VARCHAR(255) NOT NULL,
-    state VARCHAR(255),
-    zipcode VARCHAR(255) NOT NULL,
-    country VARCHAR(255),
-    timezone VARCHAR(255)
+    postal_code VARCHAR(10) NOT NULL,
+    region VARCHAR(30),
+    country_code VARCHAR(255) NOT NULL
 );
-
 CREATE INDEX IF NOT EXISTS city_index ON address(city);
-CREATE INDEX IF NOT EXISTS zipcode_index ON address(zipcode);
 
--- users/address junction table
-CREATE TABLE IF NOT EXISTS users_address(
-    user_id BIGSERIAL REFERENCES users(id) NOT NULL,
-    address_id BIGSERIAL REFERENCES address(id) NOT NULL,
-    PRIMARY KEY(user_id, address_id)
+-- User's account  table
+CREATE TABLE IF NOT EXISTS account (
+    id BIGSERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    title VARCHAR(4) NOT NULL,
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    birthdate DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    role VARCHAR(25) NOT NULL,
+    enabled BOOLEAN NOT NULL,
+    address_id BIGINT REFERENCES address(id)
 );
-
-CREATE UNIQUE INDEX IF NOT EXISTS user_address_index ON users_address(user_id, address_id);
+CREATE UNIQUE INDEX IF NOT EXISTS email_index ON account(email);
