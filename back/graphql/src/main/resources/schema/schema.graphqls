@@ -38,12 +38,18 @@ enum VehiculeCategoryRef {
 type Query {
     account(id: ID!): Account
     accounts: [Account!]
+    #liveMessage(toUserId: ID!, since:DateTime): LiveMessage
 }
 
 type Mutation {
     registerCustomer(account: NewCustomerAccountInput!): OperationResult
     # updateAccount(account: CustomerAccountInput!): Void
     # deleteAccount(account: CustomerAccountInput!): Void
+    sendLiveMessage(message: LiveMessageInput!): LiveMessage
+}
+
+type Subscription {
+  newLiveMessage(toUserId: ID!, since: DateTime): LiveMessage
 }
 
 input NewCustomerAccountInput {
@@ -79,6 +85,12 @@ input NewAddressInput {
     countryCode: String!
 }
 
+input LiveMessageInput {
+    fromUserId: ID!
+    toUserId: ID!
+    content: String!
+}
+
 type Account @key(fields: "id"){
     id: ID!
     title: Title!
@@ -86,13 +98,11 @@ type Account @key(fields: "id"){
     lastName: String!
     email: String!
     birthDate: Date!
-    address: Address!
+    address: Address
     role: Role!
     createdAt: DateTime
     updatedAt: DateTime
 }
-
-
 
 type Agency @key(fields: "id"){
     id: ID!
@@ -122,6 +132,13 @@ type Vehicule @key(fields: "registrationNumber"){
 type VehiculeCategory @key(fields: "ref"){
     ref: VehiculeCategoryRef
     name: String!
+}
+
+type LiveMessage {
+    from: Account!
+    to: Account!
+    at: DateTime
+    content: String!
 }
 
 type OperationResult {
