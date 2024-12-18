@@ -29,3 +29,12 @@ CREATE TABLE IF NOT EXISTS account (
     address_id BIGINT REFERENCES address(id)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS email_index ON account(email);
+
+
+CREATE TABLE IF NOT EXISTS live_message (
+    id BIGSERIAL PRIMARY KEY,
+    from_user_id BIGINT REFERENCES account(id),
+    to_user_id BIGINT REFERENCES account(id),
+    created_at TIMESTAMP DEFAULT NOW(),
+    content TEXT NOT NULL
+);
