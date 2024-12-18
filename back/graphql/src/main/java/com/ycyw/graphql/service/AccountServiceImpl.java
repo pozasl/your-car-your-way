@@ -44,6 +44,7 @@ public class AccountServiceImpl implements AccountService {
             accountToSave.setAddressId(address.getId());
             accountToSave.setAddress(address);
             return this.accountRepository.save(accountToSave)
+            .flatMap(acc -> this.accountRepository.findById(acc.getId()))
             .doOnError(error -> this.addressRepository.delete(address).then(Mono.error(error)))
             .map(accountMapper::entityToAccount);
         });

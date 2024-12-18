@@ -114,7 +114,7 @@
 							<addGeneratedAnnotation>false</addGeneratedAnnotation>
 							<typeMapping>
 								<Date>java.time.LocalDate</Date>
-								<DateTime>java.time.LocalDateTime</DateTime>
+								<DateTime>java.time.OffsetDateTime</DateTime>
 							</typeMapping>
 						</configuration>
 					</execution>

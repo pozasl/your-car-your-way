@@ -1,5 +1,7 @@
 package com.ycyw.graphql.mapper;
 
+import java.time.ZoneOffset;
+
 import org.springframework.stereotype.Component;
 
 import com.ycyw.graphql.entity.LiveMessageEntity;
@@ -29,7 +31,7 @@ public class LiveMessageEntityMapperImpl implements LiveMessageEntityMapper{
         return LiveMessage.newBuilder()
             .from(accountMapper.entityToAccount(entity.getFromUser()))
             .to(accountMapper.entityToAccount(entity.getToUser()))
-            .at(entity.getCreatedAt())
+            .at(entity.getCreatedAt().atOffset(ZoneOffset.UTC))
             .content(entity.getContent())
             .build();
     }
