@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ycyw.graphql.entity.AccountEntity;
-import com.ycyw.graphql.entity.AddressEntity;
 import com.ycyw.graphql.generated.types.NewCustomerAccountInput;
 import com.ycyw.graphql.generated.types.Account;
 import com.ycyw.graphql.mapper.AccountEntityMapper;
