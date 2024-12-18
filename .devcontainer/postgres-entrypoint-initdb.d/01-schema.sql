@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS account (
     title VARCHAR(4) NOT NULL,
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
-    birthdate DATE NOT NULL,
+    birth_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     role VARCHAR(25) NOT NULL,
