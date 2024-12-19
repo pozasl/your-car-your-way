@@ -11,3 +11,55 @@ query GetAllAccounts {
     updatedAt
   }
 }
+
+query GetAccountById($id: ID!) {
+  account(id: $id) {
+    address {
+      bisTer
+      city
+      countryCode
+      postalCode
+      region
+      streetName
+      streetNumber
+      streetType
+    }
+    firstName
+    lastName
+    birthDate
+  }
+}
+
+mutation RegisterCustomer($title: Title!, $password: String!, $lastName: String!, $firstName: String!, $email: String!, $birthDate: Date!, $address: NewAddressInput!) {
+  registerCustomer(
+    account: {title: $title, firstName: $firstName, lastName: $lastName, email: $email, password: $password, birthDate: $birthDate, address: $address}
+  ) {
+    message
+  }
+}
+
+mutation SendMessage($from: ID!, $to: ID!, $content: String!) {
+  sendLiveMessage(message: {fromUserId: $from, content: $content, toUserId: $to}) {
+    at
+    content
+    from {
+      firstName
+    }
+    to {
+      firstName
+    }
+  }
+}
+
+subscription MessageSub($to: ID!) {
+  newLiveMessage(toUserId: $to) {
+    at
+    content
+    from {
+      firstName
+    }
+    to {
+      firstName
+    }
+  }
+}

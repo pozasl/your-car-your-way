@@ -462,6 +462,42 @@ export type GetAllAccountsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllAccountsQuery = { __typename?: 'Query', accounts?: Array<{ __typename?: 'Account', firstName: string, lastName: string, id: string, birthDate: any, createdAt?: any | null, updatedAt?: any | null, address?: { __typename?: 'Address', city: string } | null }> | null };
 
+export type GetAccountByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetAccountByIdQuery = { __typename?: 'Query', account?: { __typename?: 'Account', firstName: string, lastName: string, birthDate: any, address?: { __typename?: 'Address', bisTer?: BisTer | null, city: string, countryCode: string, postalCode: string, region?: string | null, streetName: string, streetNumber: number, streetType: string } | null } | null };
+
+export type RegisterCustomerMutationVariables = Exact<{
+  title: Title;
+  password: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  birthDate: Scalars['Date']['input'];
+  address: NewAddressInput;
+}>;
+
+
+export type RegisterCustomerMutation = { __typename?: 'Mutation', registerCustomer?: { __typename?: 'OperationResult', message: string } | null };
+
+export type SendMessageMutationVariables = Exact<{
+  from: Scalars['ID']['input'];
+  to: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type SendMessageMutation = { __typename?: 'Mutation', sendLiveMessage?: { __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', firstName: string }, to: { __typename?: 'Account', firstName: string } } | null };
+
+export type MessageSubSubscriptionVariables = Exact<{
+  to: Scalars['ID']['input'];
+}>;
+
+
+export type MessageSubSubscription = { __typename?: 'Subscription', newLiveMessage?: { __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', firstName: string }, to: { __typename?: 'Account', firstName: string } } | null };
+
 export const GetAllAccountsDocument = gql`
     query GetAllAccounts {
   accounts {
@@ -483,6 +519,106 @@ export const GetAllAccountsDocument = gql`
   })
   export class GetAllAccountsGQL extends Apollo.Query<GetAllAccountsQuery, GetAllAccountsQueryVariables> {
     document = GetAllAccountsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetAccountByIdDocument = gql`
+    query GetAccountById($id: ID!) {
+  account(id: $id) {
+    address {
+      bisTer
+      city
+      countryCode
+      postalCode
+      region
+      streetName
+      streetNumber
+      streetType
+    }
+    firstName
+    lastName
+    birthDate
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetAccountByIdGQL extends Apollo.Query<GetAccountByIdQuery, GetAccountByIdQueryVariables> {
+    document = GetAccountByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const RegisterCustomerDocument = gql`
+    mutation RegisterCustomer($title: Title!, $password: String!, $lastName: String!, $firstName: String!, $email: String!, $birthDate: Date!, $address: NewAddressInput!) {
+  registerCustomer(
+    account: {title: $title, firstName: $firstName, lastName: $lastName, email: $email, password: $password, birthDate: $birthDate, address: $address}
+  ) {
+    message
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class RegisterCustomerGQL extends Apollo.Mutation<RegisterCustomerMutation, RegisterCustomerMutationVariables> {
+    document = RegisterCustomerDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const SendMessageDocument = gql`
+    mutation SendMessage($from: ID!, $to: ID!, $content: String!) {
+  sendLiveMessage(message: {fromUserId: $from, content: $content, toUserId: $to}) {
+    at
+    content
+    from {
+      firstName
+    }
+    to {
+      firstName
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SendMessageGQL extends Apollo.Mutation<SendMessageMutation, SendMessageMutationVariables> {
+    document = SendMessageDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const MessageSubDocument = gql`
+    subscription MessageSub($to: ID!) {
+  newLiveMessage(toUserId: $to) {
+    at
+    content
+    from {
+      firstName
+    }
+    to {
+      firstName
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class MessageSubGQL extends Apollo.Subscription<MessageSubSubscription, MessageSubSubscriptionVariables> {
+    document = MessageSubDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
