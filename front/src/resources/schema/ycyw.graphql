@@ -1,0 +1,13 @@
+query GetAllAccounts {
+  accounts {
+    address {
+      city
+    }
+    firstName
+    lastName
+    id
+    birthDate
+    createdAt
+    updatedAt
+  }
+}

@@ -2,6 +2,14 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.4.
 
+## Generate Apollo GraphQl client code
+
+To generate client code, run:
+
+```bash
+npm run generate
+```
+
 ## Development server
 
 To start a local development server, run:
