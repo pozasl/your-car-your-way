@@ -470,11 +470,11 @@ export type GetAccountByIdQueryVariables = Exact<{
 export type GetAccountByIdQuery = { __typename?: 'Query', account?: { __typename?: 'Account', firstName: string, lastName: string, birthDate: any, address?: { __typename?: 'Address', bisTer?: BisTer | null, city: string, countryCode: string, postalCode: string, region?: string | null, streetName: string, streetNumber: number, streetType: string } | null } | null };
 
 export type RegisterCustomerMutationVariables = Exact<{
-  title: Title;
+  email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+  title: Title;
   lastName: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
-  email: Scalars['String']['input'];
   birthDate: Scalars['Date']['input'];
   address: NewAddressInput;
 }>;
@@ -555,7 +555,7 @@ export const GetAccountByIdDocument = gql`
     }
   }
 export const RegisterCustomerDocument = gql`
-    mutation RegisterCustomer($title: Title!, $password: String!, $lastName: String!, $firstName: String!, $email: String!, $birthDate: Date!, $address: NewAddressInput!) {
+    mutation RegisterCustomer($email: String!, $password: String!, $title: Title!, $lastName: String!, $firstName: String!, $birthDate: Date!, $address: NewAddressInput!) {
   registerCustomer(
     account: {title: $title, firstName: $firstName, lastName: $lastName, email: $email, password: $password, birthDate: $birthDate, address: $address}
   ) {

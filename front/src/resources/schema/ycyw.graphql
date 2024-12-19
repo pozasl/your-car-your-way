@@ -30,7 +30,7 @@ query GetAccountById($id: ID!) {
   }
 }
 
-mutation RegisterCustomer($title: Title!, $password: String!, $lastName: String!, $firstName: String!, $email: String!, $birthDate: Date!, $address: NewAddressInput!) {
+mutation RegisterCustomer( $email: String!, $password: String!, $title: Title!,  $lastName: String!, $firstName: String!, $birthDate: Date!, $address: NewAddressInput!) {
   registerCustomer(
     account: {title: $title, firstName: $firstName, lastName: $lastName, email: $email, password: $password, birthDate: $birthDate, address: $address}
   ) {
