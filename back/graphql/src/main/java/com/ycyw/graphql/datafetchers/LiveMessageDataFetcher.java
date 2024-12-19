@@ -34,7 +34,7 @@ public class LiveMessageDataFetcher {
 
     @DgsSubscription(field = SUBSCRIPTION.NewLiveMessage)
     public Publisher<LiveMessage> newLiveMessage(@InputArgument("toUserId") String toUserId) {
-        return messageService.getLiveMessagePublisher();
+        return messageService.getLiveMessagePublisher(toUserId);
     }
 
     @DgsMutation(field = MUTATION.SendLiveMessage)

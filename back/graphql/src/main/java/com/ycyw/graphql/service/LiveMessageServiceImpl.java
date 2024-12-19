@@ -36,13 +36,13 @@ public class LiveMessageServiceImpl implements LiveMessageService {
     }
 
     @Override
-    public Publisher<LiveMessage> getLiveMessagePublisher() {
-        return messagePublisher.getLiveMessagePublisher();
+    public Publisher<LiveMessage> getLiveMessagePublisher(String accountId) {
+        return messagePublisher.getLiveMessagePublisher(accountId);
     }
 
     @Override
-    public Flux<LiveMessage> getMessageFromUserId(String userId) {
-        return messageRepository.findByFromUserId(Long.parseLong(userId))
+    public Flux<LiveMessage> getMessageFromUserId(String accountId) {
+        return messageRepository.findByFromUserId(Long.parseLong(accountId))
                 .map(messageMapper::entityToLiveMessage);
     }
 

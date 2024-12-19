@@ -6,5 +6,5 @@ import com.ycyw.graphql.generated.types.LiveMessage;
 
 public interface LiveMessagePublisher {
    void next(LiveMessage message);
-   Publisher<LiveMessage> getLiveMessagePublisher();
+   Publisher<LiveMessage> getLiveMessagePublisher(String accountId);
 }

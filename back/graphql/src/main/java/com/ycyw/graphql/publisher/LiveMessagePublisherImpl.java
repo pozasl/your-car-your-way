@@ -29,8 +29,8 @@ public class LiveMessagePublisherImpl implements LiveMessagePublisher{
     }
 
     @Override
-    public Publisher<LiveMessage> getLiveMessagePublisher() {
-        return messagesPublisher;
+    public Publisher<LiveMessage> getLiveMessagePublisher(String accountId) {
+        return messagesPublisher.filter(msg -> msg.getTo().getId().equals(accountId));
     };
     
 }

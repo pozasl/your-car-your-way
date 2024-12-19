@@ -15,12 +15,26 @@ public interface LiveMessageService {
 
     /**
      * Get LiveMessagePublisher
-     * @return the live message publisher
+     * 
+     * @param accountId User's account id
+     * @return A live message publisher filtered by user's destination
      */
-    Publisher<LiveMessage> getLiveMessagePublisher();
+    Publisher<LiveMessage> getLiveMessagePublisher(String accountId);
 
-    Flux<LiveMessage> getMessageFromUserId(String userId);
+    /**
+     * Get user' messages
+     * 
+     * @param accountId User's account id
+     * @return All live messages Flux
+     */
+    Flux<LiveMessage> getMessageFromUserId(String accountId);
 
+    /**
+     * Record a new live message
+     * 
+     * @param message Live message to record
+     * @return Recorded live message Mono
+     */
     Mono<LiveMessage> addMessage(LiveMessageInput message);
     
 }
