@@ -61,8 +61,7 @@ public class LiveMessageServiceImpl implements LiveMessageService {
 
     private Mono<LiveMessageEntity> addUsersWithMessage(Tuple2<AccountEntity, AccountEntity> accounts, LiveMessageEntity message) {
         return messageRepository.save(message)
-            // .flatMap(msg -> messageRepository.findById(msg.getId()))
-            // .switchIfEmpty(Mono.error(null))
+            .flatMap(savedMsg -> messageRepository.findById(savedMsg.getId()))
             .map(msgEntity -> {
                 msgEntity.setFromUser(accounts.getT1());
                 msgEntity.setToUser(accounts.getT2());
