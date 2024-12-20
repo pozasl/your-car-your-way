@@ -10,13 +10,15 @@ import { MatIconModule } from '@angular/material/icon'
 import { passwordStrengthReg } from '../../shared/validators/passworsStrengthReg'
 import { BisTer, CustomerAccountInput, Title } from '../../core/modules/graphql/generated'
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { CountryCodes } from '../../models/CountryCodes'
+import { KeyValuePipe } from '@angular/common'
 
 /**
  * Customer registration page
  */
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatCardModule, MatDatepickerModule],
+  imports: [ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatCardModule, MatDatepickerModule, KeyValuePipe],
   providers: [provideNativeDateAdapter()],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -25,14 +27,16 @@ export class RegisterComponent implements OnInit {
 
   public form!: FormGroup
   public hide = true
-  public titles = Object.keys(Title)
-  public bisTers = Object.keys(BisTer)
+  public titles = Title
+  public countryCodes = Object.entries(CountryCodes)
+  .sort((t1, t2) => t1[1] > t2[1] ? 1 :  -1)
   
 
   constructor(private authService: AuthService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.createForm();
+    console.log(this.countryCodes)
   }
 
   public submit() {

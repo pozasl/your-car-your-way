@@ -9,8 +9,8 @@
             <mat-form-field appearance="outline" class="w100p">
                 <mat-label i18n>Title</mat-label>
                 <select matNativeControl required formControlName="title">
-                    @for (title of titles; track title) {
-                    <option [value]=title>{{ title }} </option>
+                    @for (title of titles | keyvalue; track title) {
+                    <option [value]=title.key>{{ title.value }} </option>
                     }
                 </select>
             </mat-form-field>
@@ -59,6 +59,15 @@
                 <mat-label i18n>Region or State</mat-label>
                 <input matInput placeholder="" formControlName="region">
             </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Country</mat-label>
+                <select matNativeControl required formControlName="title">
+                    @for (country of countryCodes; track country) {
+                    <option [value]=country[0]> {{ country[1] }} </option>
+                    }
+                </select>
+            </mat-form-field>
+
             <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid" i18n>Register</button>
             
         </form>
