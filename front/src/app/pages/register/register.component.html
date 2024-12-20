@@ -10,7 +10,7 @@
                 <mat-label i18n>Title</mat-label>
                 <select matNativeControl required formControlName="title">
                     @for (title of titles | keyvalue; track title) {
-                    <option [value]=title.key>{{ title.value }} </option>
+                    <option [value]=title.value>{{ title.key }} </option>
                     }
                 </select>
             </mat-form-field>
