@@ -20,13 +20,7 @@ public class AddressEntity {
     @Id
     private Long id;
 
-    private int streetNumber;
-
-    private BisTer bisTer;
-
-    private String streetType;
-
-    private String streetName;
+    private String street;
 
     private String complement;
   

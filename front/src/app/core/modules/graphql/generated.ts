@@ -41,15 +41,13 @@ export type Account = {
 
 export type Address = {
   __typename?: 'Address';
-  bisTer?: Maybe<BisTer>;
   city: Scalars['String']['output'];
+  complement: Scalars['String']['output'];
   countryCode: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   postalCode: Scalars['String']['output'];
   region?: Maybe<Scalars['String']['output']>;
-  streetName: Scalars['String']['output'];
-  streetNumber: Scalars['Int']['output'];
-  streetType: Scalars['String']['output'];
+  street: Scalars['String']['output'];
 };
 
 export type Agency = {
@@ -59,11 +57,6 @@ export type Agency = {
   name: Scalars['String']['output'];
   vehicules?: Maybe<Array<Maybe<Vehicule>>>;
 };
-
-export enum BisTer {
-  Bis = 'BIS',
-  Ter = 'TER'
-}
 
 export type CustomerAccountInput = {
   address: NewAddressInput;
@@ -360,14 +353,12 @@ export type NewAccounInput = {
 };
 
 export type NewAddressInput = {
-  bisTer?: InputMaybe<BisTer>;
   city: Scalars['String']['input'];
+  complement: Scalars['String']['input'];
   countryCode: Scalars['String']['input'];
   postalCode: Scalars['String']['input'];
   region?: InputMaybe<Scalars['String']['input']>;
-  streetName: Scalars['String']['input'];
-  streetNumber: Scalars['Int']['input'];
-  streetType: Scalars['String']['input'];
+  street: Scalars['String']['input'];
 };
 
 export type NewCustomerAccountInput = {
@@ -476,7 +467,7 @@ export type GetAccountByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetAccountByIdQuery = { __typename?: 'Query', account?: { __typename?: 'Account', firstName: string, lastName: string, birthDate: any, address?: { __typename?: 'Address', bisTer?: BisTer | null, city: string, countryCode: string, postalCode: string, region?: string | null, streetName: string, streetNumber: number, streetType: string } | null } | null };
+export type GetAccountByIdQuery = { __typename?: 'Query', account?: { __typename?: 'Account', firstName: string, lastName: string, birthDate: any, address?: { __typename?: 'Address', street: string, complement: string, city: string, postalCode: string, region?: string | null, countryCode: string } | null } | null };
 
 export type RegisterCustomerMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -537,14 +528,12 @@ export const GetAccountByIdDocument = gql`
     query GetAccountById($id: ID!) {
   account(id: $id) {
     address {
-      bisTer
+      street
+      complement
       city
-      countryCode
       postalCode
       region
-      streetName
-      streetNumber
-      streetType
+      countryCode
     }
     firstName
     lastName

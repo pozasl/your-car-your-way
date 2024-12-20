@@ -15,20 +15,19 @@ query GetAllAccounts {
 query GetAccountById($id: ID!) {
   account(id: $id) {
     address {
-      bisTer
+      street
+      complement
       city
-      countryCode
       postalCode
       region
-      streetName
-      streetNumber
-      streetType
+      countryCode
     }
     firstName
     lastName
     birthDate
   }
 }
+
 
 mutation RegisterCustomer( $email: String!, $password: String!, $title: Title!,  $lastName: String!, $firstName: String!, $birthDate: Date!, $address: NewAddressInput!) {
   registerCustomer(
