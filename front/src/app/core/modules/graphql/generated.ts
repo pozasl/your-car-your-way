@@ -350,6 +350,15 @@ export type MutationSendLiveMessageArgs = {
   message: LiveMessageInput;
 };
 
+export type NewAccounInput = {
+  birthDate: Scalars['Date']['input'];
+  email: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  title: Title;
+};
+
 export type NewAddressInput = {
   bisTer?: InputMaybe<BisTer>;
   city: Scalars['String']['input'];
