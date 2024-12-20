@@ -8,10 +8,11 @@ import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatIconModule } from '@angular/material/icon'
 import { passwordStrengthReg } from '../../shared/validators/passworsStrengthReg'
-import { BisTer, CustomerAccountInput, Title } from '../../core/modules/graphql/generated'
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { NewCustomerAccountInput, Title } from '../../core/modules/graphql/generated'
+import { provideNativeDateAdapter } from '@angular/material/core'
 import { CountryCodes } from '../../models/CountryCodes'
 import { KeyValuePipe } from '@angular/common'
+import { Router } from '@angular/router'
 
 /**
  * Customer registration page
@@ -32,29 +33,33 @@ export class RegisterComponent implements OnInit {
   .sort((t1, t2) => t1[1] > t2[1] ? 1 :  -1)
   
 
-  constructor(private authService: AuthService, private fb: FormBuilder) { }
+  constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
-    this.createForm();
+    this.createForm()
   }
 
   public submit() {
-    const customerAccount: CustomerAccountInput = {
+    const customerAccount: NewCustomerAccountInput = {
       title: this.form.value.title,
       firstName: this.form.value.firstname,
       lastName: this.form.value.lastname,
-      birthDate: this.form.value.birthDate,
+      birthDate: new Date(this.form.value.birthDate).toISOString().substring(0,10),
       email: this.form.value.email,
       password: this.form.value.password,
       address: {
+        street: this.form.value.street,
+        complement: this.form.value.complement,
         city: this.form.value.city,
         postalCode: this.form.value.postalCode,
         region: this.form.value.region,
         countryCode: this.form.value.countryCode
       }
     }
-    console.log(customerAccount);
-    this.authService.registerCustomer(customerAccount)
+    this.authService.registerCustomer(customerAccount).subscribe({
+      next: this.onRegisterSuccess,
+      error: this.onRegisterError
+    })
   }
 
   private createForm() {
@@ -71,7 +76,15 @@ export class RegisterComponent implements OnInit {
       postalCode: ['', [Validators.required]],
       region: [''],
       countryCode: ['', [Validators.required]],
-    });
+    })
+  }
+
+  private onRegisterSuccess(msg: String) {
+    this.router.navigate(['/login'])
+  }
+
+  private onRegisterError(error: Error) {
+    console.error(error)
   }
 
 }
