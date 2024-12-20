@@ -52,6 +52,15 @@ type Subscription {
   newLiveMessage(toUserId: ID!, since: DateTime): LiveMessage
 }
 
+input NewAccounInput {
+    title: Title!
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    birthDate: Date!
+}
+
 input NewCustomerAccountInput {
     title: Title!
     firstName: String!
