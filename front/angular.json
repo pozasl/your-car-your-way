@@ -4,6 +4,12 @@
   "newProjectRoot": "projects",
   "projects": {
     "front": {
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "fr-FR": "src/locales/messages.fr.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,6 +19,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "localize": [
+              "fr-FR"
+            ],
             "outputPath": "dist/front",
             "index": "src/index.html",
             "browser": "src/main.ts",
