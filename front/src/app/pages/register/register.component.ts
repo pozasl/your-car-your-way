@@ -36,11 +36,24 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
-    console.log(this.countryCodes)
   }
 
   public submit() {
-    const customerAccount: CustomerAccountInput = this.form.value
+    const customerAccount: CustomerAccountInput = {
+      title: this.form.value.title,
+      firstName: this.form.value.firstname,
+      lastName: this.form.value.lastname,
+      birthDate: this.form.value.birthDate,
+      email: this.form.value.email,
+      password: this.form.value.password,
+      address: {
+        city: this.form.value.city,
+        postalCode: this.form.value.postalCode,
+        region: this.form.value.region,
+        countryCode: this.form.value.countryCode
+      }
+    }
+    console.log(customerAccount);
     this.authService.registerCustomer(customerAccount)
   }
 
@@ -50,10 +63,10 @@ export class RegisterComponent implements OnInit {
       firstname: ['', [Validators.required]],
       lastname: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      birthDate: [Date.now(), [Validators.required]],
+      birthDate: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.pattern(passwordStrengthReg)]],
       street: ['', [Validators.required]],
-      complement: ['', [Validators.required]],
+      complement: [''],
       city: ['', [Validators.required]],
       postalCode: ['', [Validators.required]],
       region: [''],

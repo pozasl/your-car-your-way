@@ -61,7 +61,7 @@
             </mat-form-field>
             <mat-form-field appearance="outline" class="w100p">
                 <mat-label i18n>Country</mat-label>
-                <select matNativeControl required formControlName="title">
+                <select matNativeControl required formControlName="countryCode">
                     @for (country of countryCodes; track country) {
                     <option [value]=country[0]> {{ country[1] }} </option>
                     }
