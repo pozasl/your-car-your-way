@@ -10,6 +10,19 @@ To generate client code, run:
 npm run generate
 ```
 
+## Extract localisation
+
+To extracte localisation file code, run:
+
+```bash
+ng extract-i18n --output-path src/locales
+```
+
+Then copy the extracted localization file, i.e. for French:
+```bash
+cp src/locales/messages.xlf src/locales/messages.fr-FR.xlf
+```
+
 ## Development server
 
 To start a local development server, run:
