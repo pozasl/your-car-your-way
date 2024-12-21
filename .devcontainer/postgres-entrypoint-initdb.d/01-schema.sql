@@ -1,10 +1,7 @@
 -- address table
 CREATE TABLE IF NOT EXISTS address(
     id BIGSERIAL PRIMARY KEY,
-    street_number INT NOT NULL,
-    bis_ter CHAR(3),
-    street_type VARCHAR(25) NOT NULL,
-    street_name VARCHAR(255) NOT NULL,
+    street VARCHAR(255) NOT NULL,
     complement VARCHAR(255),
     city VARCHAR(255) NOT NULL,
     postal_code VARCHAR(10) NOT NULL,

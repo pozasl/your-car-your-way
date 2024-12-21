@@ -3,11 +3,6 @@ enum Role {
     CUSTOMER_SERVICE,
 }
 
-enum BisTer {
-    BIS,
-    TER,
-}
-
 enum Title {
     MR,
     MRS,
@@ -52,6 +47,15 @@ type Subscription {
   newLiveMessage(toUserId: ID!, since: DateTime): LiveMessage
 }
 
+input NewAccounInput {
+    title: Title!
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    birthDate: Date!
+}
+
 input NewCustomerAccountInput {
     title: Title!
     firstName: String!
@@ -75,10 +79,8 @@ input CustomerAccountInput {
 }
 
 input NewAddressInput {
-    streetNumber: Int!
-    bisTer: BisTer
-    streetType: String!
-    streetName: String!
+    street: String!
+    complement: String!
     city: String!
     postalCode: String!
     region: String
@@ -113,10 +115,8 @@ type Agency @key(fields: "id"){
 
 type Address @key(fields: "id"){
     id: ID!
-    streetNumber: Int!
-    bisTer: BisTer
-    streetType: String!
-    streetName: String!
+    street: String!
+    complement: String!
     city: String!
     postalCode: String!
     region: String

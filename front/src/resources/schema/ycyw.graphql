@@ -1,0 +1,64 @@
+query GetAllAccounts {
+  accounts {
+    address {
+      city
+    }
+    firstName
+    lastName
+    id
+    birthDate
+    createdAt
+    updatedAt
+  }
+}
+
+query GetAccountById($id: ID!) {
+  account(id: $id) {
+    address {
+      street
+      complement
+      city
+      postalCode
+      region
+      countryCode
+    }
+    firstName
+    lastName
+    birthDate
+  }
+}
+
+
+mutation RegisterCustomer( $email: String!, $password: String!, $title: Title!,  $lastName: String!, $firstName: String!, $birthDate: Date!, $address: NewAddressInput!) {
+  registerCustomer(
+    account: {title: $title, firstName: $firstName, lastName: $lastName, email: $email, password: $password, birthDate: $birthDate, address: $address}
+  ) {
+    message
+  }
+}
+
+mutation SendMessage($from: ID!, $to: ID!, $content: String!) {
+  sendLiveMessage(message: {fromUserId: $from, content: $content, toUserId: $to}) {
+    at
+    content
+    from {
+      firstName
+    }
+    to {
+      firstName
+    }
+  }
+}
+
+subscription MessageSub($to: ID!) {
+  newLiveMessage(toUserId: $to) {
+    at
+    content
+    from {
+      firstName
+    }
+    to {
+      firstName
+    }
+  }
+}
