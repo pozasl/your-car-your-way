@@ -2,7 +2,7 @@ package com.ycyw.graphql.datafetchers;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono;
  * Account's Datafetcher
  */
 @DgsComponent
-@Secured("IS_AUTHENTICATED_FULLY")
 public class AccountDataFetcher {
     private final AccountService accountService;
 
@@ -35,6 +34,7 @@ public class AccountDataFetcher {
      * @param id
      * @return
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Account)
     public Mono<Account> account(@InputArgument("id") String id) {
         if (Strings.isBlank(id)) {
@@ -48,6 +48,7 @@ public class AccountDataFetcher {
      * 
      * @return
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Accounts)
     public Flux<Account> accounts() {
         return accountService.getAccounts();
