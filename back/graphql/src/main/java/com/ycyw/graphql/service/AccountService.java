@@ -19,6 +19,14 @@ public interface AccountService {
     Mono<Account> getAccount(String id);
 
     /**
+     * Get a Account by its email
+     *
+     * @param email the user's email
+     * @return a user's mono
+     */
+    Mono<Account> getAccountByEmail(String email);
+
+    /**
      * Create or Update a customer account
      *
      * @param user The user to create/update
