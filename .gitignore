@@ -1,0 +1,3 @@
+back/graphql/src/main/resources/certs/keypair.pem
+back/graphql/src/main/resources/certs/private.pem
+back/graphql/src/main/resources/certs/public.pem
