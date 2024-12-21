@@ -33,6 +33,8 @@ enum VehiculeCategoryRef {
 type Query {
     account(id: ID!): Account
     accounts: [Account!]
+    token(credentials: AccountCredentials!): String
+    me: Account
     #liveMessage(toUserId: ID!, since:DateTime): LiveMessage
 }
 
@@ -41,10 +43,16 @@ type Mutation {
     # updateAccount(account: CustomerAccountInput!): Void
     # deleteAccount(account: CustomerAccountInput!): Void
     sendLiveMessage(message: LiveMessageInput!): LiveMessage
+
 }
 
 type Subscription {
   newLiveMessage(toUserId: ID!, since: DateTime): LiveMessage
+}
+
+input AccountCredentials {
+    email: String!
+    password: String!
 }
 
 input NewAccounInput {
