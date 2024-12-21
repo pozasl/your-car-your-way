@@ -35,6 +35,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 		 <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
@@ -114,6 +118,7 @@
 							<addGeneratedAnnotation>false</addGeneratedAnnotation>
 							<typeMapping>
 								<Date>java.time.LocalDate</Date>
+								<DateTime>java.time.OffsetDateTime</DateTime>
 							</typeMapping>
 						</configuration>
 					</execution>

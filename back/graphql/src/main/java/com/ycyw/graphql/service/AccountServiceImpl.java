@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ycyw.graphql.entity.AccountEntity;
-import com.ycyw.graphql.entity.AddressEntity;
 import com.ycyw.graphql.generated.types.NewCustomerAccountInput;
 import com.ycyw.graphql.generated.types.Account;
 import com.ycyw.graphql.mapper.AccountEntityMapper;
@@ -45,6 +44,7 @@ public class AccountServiceImpl implements AccountService {
             accountToSave.setAddressId(address.getId());
             accountToSave.setAddress(address);
             return this.accountRepository.save(accountToSave)
+            .flatMap(acc -> this.accountRepository.findById(acc.getId()))
             .doOnError(error -> this.addressRepository.delete(address).then(Mono.error(error)))
             .map(accountMapper::entityToAccount);
         });

@@ -3,8 +3,6 @@ package com.ycyw.graphql.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import com.ycyw.graphql.generated.types.BisTer;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,13 +18,7 @@ public class AddressEntity {
     @Id
     private Long id;
 
-    private int streetNumber;
-
-    private BisTer bisTer;
-
-    private String streetType;
-
-    private String streetName;
+    private String street;
 
     private String complement;
   

@@ -1,0 +1,75 @@
+<button mat-icon-button routerLink="/" class="backBtn">
+    <mat-icon>arrow_back</mat-icon>
+</button>
+<div class="register">
+    <div class="form-flex-container">
+        <img class="logo" src="/assets/ycyw_logo.png" alt="logo" />
+        <h1 i18n>Register</h1>
+        <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Title</mat-label>
+                <select matNativeControl required formControlName="title">
+                    @for (title of titles | keyvalue; track title) {
+                    <option [value]=title.value>{{ title.key }} </option>
+                    }
+                </select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Firstname</mat-label>
+                <input matInput placeholder="Firstname" formControlName="firstname">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Lastname</mat-label>
+                <input matInput placeholder="Lastname" formControlName="lastname">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Date of birth</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthDate">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>E-mail</mat-label>
+                <input matInput placeholder="Email" formControlName="email">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password" formControlName="password">
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </mat-form-field>
+            <h2 i18n>Postal address</h2>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Address</mat-label>
+                <input matInput placeholder="Street name" formControlName="street">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Complement</mat-label>
+                <input matInput placeholder="" formControlName="complement">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>City or location</mat-label>
+                <input matInput placeholder="City" formControlName="city">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Zipcode</mat-label>
+                <input matInput placeholder="Zipcode" formControlName="postalCode">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Region or State</mat-label>
+                <input matInput placeholder="" formControlName="region">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w100p">
+                <mat-label i18n>Country</mat-label>
+                <select matNativeControl required formControlName="countryCode">
+                    @for (country of countryCodes; track country) {
+                    <option [value]=country[0]> {{ country[1] }} </option>
+                    }
+                </select>
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid" i18n>Register</button>
+            
+        </form>
+    </div>
+</div>

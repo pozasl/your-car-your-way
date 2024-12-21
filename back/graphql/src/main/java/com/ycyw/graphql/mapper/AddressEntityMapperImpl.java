@@ -12,10 +12,8 @@ public class AddressEntityMapperImpl implements AddressEntityMapper {
     @Override
     public AddressEntity newAddressToEntity(NewAddressInput address) {
         return AddressEntity.builder()
-                .streetNumber(address.getStreetNumber())
-                .bisTer(address.getBisTer())
-                .streetType(address.getStreetType())
-                .streetName(address.getStreetName())
+                .street(address.getStreet())
+                .complement(address.getComplement())
                 .city(address.getCity())
                 .postalCode(address.getPostalCode())
                 .region(address.getRegion())
@@ -27,10 +25,8 @@ public class AddressEntityMapperImpl implements AddressEntityMapper {
     public Address entityToAddress(AddressEntity entity) {
         return Address.newBuilder()
                 .id(entity.getId().toString())
-                .streetNumber(entity.getStreetNumber())
-                .bisTer(entity.getBisTer())
-                .streetType(entity.getStreetType())
-                .streetName(entity.getStreetName())
+                .street(entity.getStreet())
+                .complement(entity.getComplement())
                 .city(entity.getCity())
                 .postalCode(entity.getPostalCode())
                 .region(entity.getRegion())

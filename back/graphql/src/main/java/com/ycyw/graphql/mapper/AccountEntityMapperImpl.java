@@ -1,6 +1,9 @@
 package com.ycyw.graphql.mapper;
 
 
+import java.time.ZoneOffset;
+import java.util.Objects;
+
 import org.springframework.stereotype.Component;
 
 import com.ycyw.graphql.entity.AccountEntity;
@@ -33,16 +36,20 @@ public class AccountEntityMapperImpl implements AccountEntityMapper{
 
     @Override
     public Account entityToAccount(AccountEntity entity) {
-        return Account.newBuilder()
-            .id(entity.getId().toString())
-            .title(entity.getTitle())
-            .email(entity.getEmail())
-            .firstName(entity.getFirstname())
-            .lastName(entity.getLastname())
-            .birthDate(entity.getBirthDate())
-            .address(addressMapper.entityToAddress(entity.getAddress()))
-            .role(entity.getRole())
-            .build(); 
+        Account account = Account.newBuilder()
+        .id(entity.getId().toString())
+        .title(entity.getTitle())
+        .email(entity.getEmail())
+        .firstName(entity.getFirstname())
+        .lastName(entity.getLastname())
+        .birthDate(entity.getBirthDate())
+        .createdAt(entity.getCreatedAt().atOffset(ZoneOffset.UTC))
+        .updatedAt(entity.getUpdatedAt().atOffset(ZoneOffset.UTC))
+        .role(entity.getRole())
+        .build();
+        if (Objects.nonNull(entity.getAddress()))
+            account.setAddress(addressMapper.entityToAddress(entity.getAddress()));
+        return account;
     }
     
 }

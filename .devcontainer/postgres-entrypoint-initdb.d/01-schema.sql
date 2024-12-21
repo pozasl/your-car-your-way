@@ -1,10 +1,7 @@
 -- address table
 CREATE TABLE IF NOT EXISTS address(
     id BIGSERIAL PRIMARY KEY,
-    street_number INT NOT NULL,
-    bis_ter CHAR(3),
-    street_type VARCHAR(25) NOT NULL,
-    street_name VARCHAR(255) NOT NULL,
+    street VARCHAR(255) NOT NULL,
     complement VARCHAR(255),
     city VARCHAR(255) NOT NULL,
     postal_code VARCHAR(10) NOT NULL,
@@ -21,7 +18,7 @@ CREATE TABLE IF NOT EXISTS account (
     title VARCHAR(4) NOT NULL,
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
-    birthdate DATE NOT NULL,
+    birth_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     role VARCHAR(25) NOT NULL,
@@ -29,3 +26,12 @@ CREATE TABLE IF NOT EXISTS account (
     address_id BIGINT REFERENCES address(id)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS email_index ON account(email);
+
+
+CREATE TABLE IF NOT EXISTS live_message (
+    id BIGSERIAL PRIMARY KEY,
+    from_user_id BIGINT REFERENCES account(id),
+    to_user_id BIGINT REFERENCES account(id),
+    created_at TIMESTAMP DEFAULT NOW(),
+    content TEXT NOT NULL
+);
