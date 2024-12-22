@@ -1,0 +1,44 @@
+
+img.logo {
+    height: 2em;
+    width: auto;
+}
+
+.mainContent {
+    margin-top: 5em;
+}
+
+.ycyw-toolbar {
+    background-color: white;
+    border-bottom: solid 1px darkgrey;
+    z-index: 200;
+    height: 2.5em;
+}
+
+
+mat-nav-list.navLink {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+}
+
+mat-nav-list.navLink>* {
+    margin: 0;
+    padding: 0 0.5em;
+    width: auto;
+    flex: 1 1 1
+}
+
+mat-nav-list.navLink mat-icon {
+    margin-top: 0.5em;
+    flex: 1 1 1
+}
+
+.navLink a {
+    font-size: medium;
+    cursor: pointer;
+}
+
+.navBtnMenu {
+    margin-left: auto;
+}
