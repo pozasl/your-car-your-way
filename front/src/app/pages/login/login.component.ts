@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
    */
   private onLoginSuccess(user:  UserAccount) {
     this.sessionService.login(user)
-    this.router.navigate(['/'])
+    this.router.navigate(['/agencies'])
   }
 
   /**
