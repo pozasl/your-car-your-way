@@ -39,6 +39,11 @@ export type Account = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type AccountCredentials = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
 export type Address = {
   __typename?: 'Address';
   city: Scalars['String']['output'];
@@ -382,6 +387,8 @@ export type Query = {
   _service: _Service;
   account?: Maybe<Account>;
   accounts?: Maybe<Array<Account>>;
+  me?: Maybe<Account>;
+  token?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -392,6 +399,11 @@ export type Query_EntitiesArgs = {
 
 export type QueryAccountArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryTokenArgs = {
+  credentials: AccountCredentials;
 };
 
 export enum Role {
@@ -468,6 +480,16 @@ export type GetAccountByIdQueryVariables = Exact<{
 
 
 export type GetAccountByIdQuery = { __typename?: 'Query', account?: { __typename?: 'Account', firstName: string, lastName: string, birthDate: any, address?: { __typename?: 'Address', street: string, complement: string, city: string, postalCode: string, region?: string | null, countryCode: string } | null } | null };
+
+export type GetTokenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTokenQuery = { __typename?: 'Query', token?: string | null };
+
+export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'Account', id: string, role: Role, email: string } | null };
 
 export type RegisterCustomerMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -547,6 +569,42 @@ export const GetAccountByIdDocument = gql`
   })
   export class GetAccountByIdGQL extends Apollo.Query<GetAccountByIdQuery, GetAccountByIdQueryVariables> {
     document = GetAccountByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetTokenDocument = gql`
+    query GetToken {
+  token(credentials: {email: "dave@test.com", password: "Pass-1234"})
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetTokenGQL extends Apollo.Query<GetTokenQuery, GetTokenQueryVariables> {
+    document = GetTokenDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetMeDocument = gql`
+    query GetMe {
+  me {
+    id
+    role
+    email
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetMeGQL extends Apollo.Query<GetMeQuery, GetMeQueryVariables> {
+    document = GetMeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
