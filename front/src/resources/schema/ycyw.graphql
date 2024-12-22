@@ -63,6 +63,14 @@ mutation SendMessage($from: ID!, $to: ID!, $content: String!) {
   }
 }
 
+mutation SetUserOnline($user: UserOnlineInput!, $online: Boolean!) {
+  setUserOnline(user: $user, online: $online) {
+    message
+  }
+}
+
+
+
 subscription MessageSub($to: ID!) {
   newLiveMessage(toUserId: $to) {
     at
@@ -74,4 +82,20 @@ subscription MessageSub($to: ID!) {
       firstName
     }
   }
+}
+
+subscription OnlineCustomerSub {
+    customersOnline {
+      id
+      name
+      role
+    }
+}
+
+subscription OnlineCustomerServiceSub {
+    customerServiceOnline {
+      id
+      name
+      role
+    }
 }

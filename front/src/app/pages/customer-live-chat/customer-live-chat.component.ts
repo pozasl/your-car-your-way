@@ -1,25 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LiveChatComponent } from '../../components/live-chat/live-chat.component';
 import { LiveChatService } from '../../services/live-chat.service';
 import { UserAccount } from '../../models/UserAccount';
 import { SessionService } from '../../services/session.service';
+import { UserOnline, UserOnlineInput } from '../../core/modules/graphql/generated';
+import { Observable, Subscriber, Subscription } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-customer-live-chat',
-  imports: [LiveChatComponent],
+  imports: [LiveChatComponent, AsyncPipe],
   templateUrl: './customer-live-chat.component.html',
   styleUrl: './customer-live-chat.component.css'
 })
-export class CustomerLiveChatComponent implements OnInit{
+export class CustomerLiveChatComponent implements OnInit, OnDestroy{
 
-  usersOnline: UserAccount[] = []
+  $userOnlines!: Observable<UserOnline[]>
 
   constructor(private sessionService: SessionService, private liveChatService: LiveChatService) {}
 
   ngOnInit(): void {
-    this.liveChatService.setOnline(this.sessionService.account)
+    this.$userOnlines = this.liveChatService.subOnlineUsersFor(this.sessionService.account!.role);
+    this.liveChatService.setOnline(this.sessionService.account!, true)
   }
 
-  
+  ngOnDestroy(): void {
+    this.liveChatService.setOnline(this.sessionService.account!, false)
+ }
 
 }

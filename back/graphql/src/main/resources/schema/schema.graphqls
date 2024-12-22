@@ -43,14 +43,13 @@ type Mutation {
     # updateAccount(account: CustomerAccountInput!): Void
     # deleteAccount(account: CustomerAccountInput!): Void
     sendLiveMessage(message: LiveMessageInput!): LiveMessage
-    setUserOnline(user: UserOnlineInput!): OperationResult
-    setUserOffline(user: UserOnlineInput!): OperationResult
+    setUserOnline(user: UserOnlineInput!, online: Boolean): OperationResult
 }
 
 type Subscription {
   newLiveMessage(toUserId: ID!, since: DateTime): LiveMessage
-  customersOnline: [UserOnline]
-  customerServiceOnline: [UserOnline]
+  customersOnline: [UserOnline!]
+  customerServiceOnline: [UserOnline!]
 }
 
 input AccountCredentials {

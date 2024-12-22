@@ -1,2 +1,7 @@
 <p>customer-live-chat works!</p>
+<ul>
+    @for(user of $userOnlines | async; track user.id) {
+    <li>{{ user.name}}</li>
+    }
+</ul>
 <app-live-chat/>
