@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NewCustomerAccountInput, RegisterCustomerGQL } from '../core/modules/graphql/generated';
-import { map, Observable } from 'rxjs';
+import { AccountCredentials, GetTokenGQL, NewCustomerAccountInput, RegisterCustomerGQL } from '../core/modules/graphql/generated';
+import { map, Observable, take } from 'rxjs';
 
 
 /**
@@ -11,7 +11,9 @@ import { map, Observable } from 'rxjs';
 })
 export class AuthService {
 
-  constructor(private registerCustomerGQl: RegisterCustomerGQL) { }
+  constructor(
+    private registerCustomerGQl: RegisterCustomerGQL,
+    private getToken: GetTokenGQL) { }
 
   /**
    * Register a new customer account
@@ -20,7 +22,7 @@ export class AuthService {
    * @returns an Observable avec 
    */
   registerCustomer(account: NewCustomerAccountInput): Observable<string> {
-    return this.registerCustomerGQl.mutate(account).pipe(map(result => result.data!.registerCustomer!.message))
+    return this.registerCustomerGQl.mutate(account).pipe(take(1), map(result => result.data!.registerCustomer!.message))
   }
 
   /**
@@ -29,7 +31,7 @@ export class AuthService {
    * @param email 
    * @param password
    */
-  login(email: string, password: string) {
-
+  login(credentials: AccountCredentials): Observable<string> {
+    return this.getToken.watch().valueChanges.pipe(take(1), map(result => result.data!.token!))
   }
 }
