@@ -25,6 +25,10 @@ export class SessionService {
     return this._token
   }
 
+  public get resuming(): boolean {
+    return !this.logged && this._token != null;
+  }
+
   /**
    * Login session
    * @param account 
