@@ -28,15 +28,16 @@ query GetAccountById($id: ID!) {
   }
 }
 
-query GetToken {
-  token(credentials: {email: "dave@test.com", password: "Pass-1234"})
+query GetToken($credentials: AccountCredentials!) {
+  token(credentials: $credentials)
 }
 
 query GetMe {
   me {
     id
     role
-    email
+    firstName
+    lastName
   }
 }
 

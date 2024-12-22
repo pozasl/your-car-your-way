@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { Account } from '../core/modules/graphql/generated'
 import { BehaviorSubject, Observable } from 'rxjs';
+import { UserAccount } from '../models/UserAccount';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class SessionService {
 
   public logged = false;
-  public account: Account | undefined
+  public account: UserAccount | undefined
   private _token: string | null
   private loggedSubject = new BehaviorSubject<boolean>(this.logged);
 
@@ -29,7 +29,7 @@ export class SessionService {
    * Login session
    * @param account 
    */
-  public login(account: Account) {
+  public login(account: UserAccount) {
     this.account = account
     this.logged = true
     this.next()

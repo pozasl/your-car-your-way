@@ -481,7 +481,9 @@ export type GetAccountByIdQueryVariables = Exact<{
 
 export type GetAccountByIdQuery = { __typename?: 'Query', account?: { __typename?: 'Account', firstName: string, lastName: string, birthDate: any, address?: { __typename?: 'Address', street: string, complement: string, city: string, postalCode: string, region?: string | null, countryCode: string } | null } | null };
 
-export type GetTokenQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetTokenQueryVariables = Exact<{
+  credentials: AccountCredentials;
+}>;
 
 
 export type GetTokenQuery = { __typename?: 'Query', token?: string | null };
@@ -489,7 +491,7 @@ export type GetTokenQuery = { __typename?: 'Query', token?: string | null };
 export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'Account', id: string, role: Role, email: string } | null };
+export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'Account', id: string, role: Role, firstName: string, lastName: string } | null };
 
 export type RegisterCustomerMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -575,8 +577,8 @@ export const GetAccountByIdDocument = gql`
     }
   }
 export const GetTokenDocument = gql`
-    query GetToken {
-  token(credentials: {email: "dave@test.com", password: "Pass-1234"})
+    query GetToken($credentials: AccountCredentials!) {
+  token(credentials: $credentials)
 }
     `;
 
@@ -595,7 +597,8 @@ export const GetMeDocument = gql`
   me {
     id
     role
-    email
+    firstName
+    lastName
   }
 }
     `;
