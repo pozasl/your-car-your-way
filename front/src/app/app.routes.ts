@@ -7,7 +7,7 @@ import { AuthGuard } from './guards/auth.guards';
 import { UnauthGuard } from './guards/unauth.guards';
 import { OffersComponent } from './pages/offers/offers.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { LiveChatComponent } from './components/live-chat/live-chat.component';
+import { CustomerLiveChatComponent } from './pages/customer-live-chat/customer-live-chat.component';
 
 export const routes: Routes = [
     { path: '', title: 'Your Car Your Way', component: HomeComponent, canActivate: [UnauthGuard] },
@@ -15,7 +15,7 @@ export const routes: Routes = [
     { path: 'login', title: 'Login', component: LoginComponent, canActivate: [UnauthGuard] },
     { path: 'agencies', title: 'Agencies list', component: AgenciesComponent, canActivate: [AuthGuard] },
     { path: 'offers', title: 'Rental offers', component: OffersComponent, canActivate: [AuthGuard] },
-    { path: 'live-chat', title: 'Live client service chat', component: LiveChatComponent, canActivate: [AuthGuard] },
+    { path: 'live-chat', title: 'Live client service chat', component: CustomerLiveChatComponent, canActivate: [AuthGuard] },
     { path: '404', title: 'Introuvable', component: NotFoundComponent},
     { path: '**', redirectTo: '404'}
 ];
