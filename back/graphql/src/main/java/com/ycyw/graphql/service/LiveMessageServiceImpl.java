@@ -34,7 +34,8 @@ public class LiveMessageServiceImpl implements LiveMessageService {
     private final AccountRepository accountRepository;
 
     public LiveMessageServiceImpl(LiveMessageRepository messageRepository, LiveMessagePublisher messagePublisher,
-            LiveMessageEntityMapper messageMapper, AccountRepository accountRepository, UserOnlinePublisher onlinePublisher) {
+            LiveMessageEntityMapper messageMapper, AccountRepository accountRepository,
+            UserOnlinePublisher onlinePublisher) {
         this.messageRepository = messageRepository;
         this.messagePublisher = messagePublisher;
         this.messageMapper = messageMapper;
@@ -58,23 +59,23 @@ public class LiveMessageServiceImpl implements LiveMessageService {
         return Mono.zip(
                 accountRepository.findById(Long.parseLong(message.getFromUserId())),
                 accountRepository.findById(Long.parseLong(message.getToUserId())))
-                .flatMap(accounts -> addUsersWithMessage(accounts, messageMapper.liveMessageToEntity(message))
-                )
+                .flatMap(accounts -> addUsersWithMessage(accounts, messageMapper.liveMessageToEntity(message)))
                 .map(messageMapper::entityToLiveMessage)
                 .doOnNext(msg -> {
                     messagePublisher.next(msg);
                 });
     }
 
-    private Mono<LiveMessageEntity> addUsersWithMessage(Tuple2<AccountEntity, AccountEntity> accounts, LiveMessageEntity message) {
+    private Mono<LiveMessageEntity> addUsersWithMessage(Tuple2<AccountEntity, AccountEntity> accounts,
+            LiveMessageEntity message) {
         return messageRepository.save(message)
-            .flatMap(savedMsg -> messageRepository.findById(savedMsg.getId()))
-            .map(msgEntity -> {
-                msgEntity.setFromUser(accounts.getT1());
-                msgEntity.setToUser(accounts.getT2());
-                return msgEntity;
-            });
-        
+                .flatMap(savedMsg -> messageRepository.findById(savedMsg.getId()))
+                .map(msgEntity -> {
+                    msgEntity.setFromUser(accounts.getT1());
+                    msgEntity.setToUser(accounts.getT2());
+                    return msgEntity;
+                });
+
     }
 
     @Override
@@ -83,13 +84,8 @@ public class LiveMessageServiceImpl implements LiveMessageService {
     }
 
     @Override
-    public void addUserOnline(UserOnline user) {
-        onlinePublisher.setOnline(user);
-    }
-
-    @Override
-    public void removeUserOnline(UserOnline user) {
-        onlinePublisher.setOffline(user);;
+    public void setUserOnline(UserOnline user, Boolean online) {
+        onlinePublisher.setOnline(user, true);
     }
 
 }

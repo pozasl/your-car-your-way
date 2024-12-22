@@ -29,14 +29,11 @@ public class UserOnlinePublisherImpl implements UserOnlinePublisher {
     }
 
     @Override
-    public void setOnline(UserOnline user) {
-        userOnlines.add(user);
-        usersStream.next(userOnlines);
-    }
-
-    @Override
-    public void setOffline(UserOnline user) {
-        userOnlines.remove(user);
+    public void setOnline(UserOnline user, Boolean online) {
+        if (online)
+            userOnlines.add(user);
+        else
+            userOnlines.remove(user);
         usersStream.next(userOnlines);
     }
 

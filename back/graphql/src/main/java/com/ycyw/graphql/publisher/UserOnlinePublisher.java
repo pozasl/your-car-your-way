@@ -16,13 +16,7 @@ public interface UserOnlinePublisher {
      * Set a user online
      * @param user
      */
-    void setOnline(UserOnline user);
-
-    /**
-     * Set a user offline
-     * @param user
-     */
-    void setOffline(UserOnline user);
+    void setOnline(UserOnline user, Boolean online);
 
     /**
      * Get a specific role's users online publisher

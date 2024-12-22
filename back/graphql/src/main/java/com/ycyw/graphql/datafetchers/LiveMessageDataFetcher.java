@@ -62,16 +62,10 @@ public class LiveMessageDataFetcher {
 
     @PreAuthorize("isAuthenticated()")
     @DgsMutation(field = MUTATION.SetUserOnline)
-    public Mono<OperationResult> setUserOnline(@InputArgument("user") UserOnline user) {
-        messageService.addUserOnline(user);
+    public Mono<OperationResult> setUserOnline(@InputArgument("user") UserOnline user, @InputArgument("online") Boolean online) {
+        messageService.setUserOnline(user, online);
         return Mono.just(OperationResult.newBuilder().message(user.getName() + "joined").build());
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @DgsMutation(field = MUTATION.SetUserOffline)
-    public Mono<OperationResult> setUserOffline(@InputArgument("user") UserOnline user) {
-        messageService.addUserOnline(user);
-        return Mono.just(OperationResult.newBuilder().message(user.getName() + "joined").build());
-    }
 
 }

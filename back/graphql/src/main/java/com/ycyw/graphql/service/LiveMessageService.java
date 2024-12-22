@@ -50,17 +50,11 @@ public interface LiveMessageService {
     Publisher<List<UserOnline>> getUserOnlinePublisher(Role role);
 
     /**
-     * Add a user in the online user list
-     * @param user the user to set online
+     * Set a user online or offline
+     * @param user the user to set online/offline
+     * @param online set it online or offline
      * @return
      */
-    void addUserOnline(UserOnline user);
-
-    /**
-     * Remove user in the online user list
-     * @param user the user to set online
-     * @return
-     */
-    void removeUserOnline(UserOnline user);
+    void setUserOnline(UserOnline user, Boolean online);
     
 }
