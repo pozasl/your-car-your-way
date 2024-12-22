@@ -1,5 +1,7 @@
 package com.ycyw.graphql.service;
 
+import java.util.List;
+
 import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Service;
 
@@ -7,8 +9,11 @@ import com.ycyw.graphql.entity.AccountEntity;
 import com.ycyw.graphql.entity.LiveMessageEntity;
 import com.ycyw.graphql.generated.types.LiveMessage;
 import com.ycyw.graphql.generated.types.LiveMessageInput;
+import com.ycyw.graphql.generated.types.Role;
+import com.ycyw.graphql.generated.types.UserOnline;
 import com.ycyw.graphql.mapper.LiveMessageEntityMapper;
 import com.ycyw.graphql.publisher.LiveMessagePublisher;
+import com.ycyw.graphql.publisher.UserOnlinePublisher;
 import com.ycyw.graphql.repository.AccountRepository;
 import com.ycyw.graphql.repository.LiveMessageRepository;
 
@@ -25,14 +30,16 @@ public class LiveMessageServiceImpl implements LiveMessageService {
     private final LiveMessageRepository messageRepository;
     private final LiveMessagePublisher messagePublisher;
     private final LiveMessageEntityMapper messageMapper;
+    private final UserOnlinePublisher onlinePublisher;
     private final AccountRepository accountRepository;
 
     public LiveMessageServiceImpl(LiveMessageRepository messageRepository, LiveMessagePublisher messagePublisher,
-            LiveMessageEntityMapper messageMapper, AccountRepository accountRepository) {
+            LiveMessageEntityMapper messageMapper, AccountRepository accountRepository, UserOnlinePublisher onlinePublisher) {
         this.messageRepository = messageRepository;
         this.messagePublisher = messagePublisher;
         this.messageMapper = messageMapper;
         this.accountRepository = accountRepository;
+        this.onlinePublisher = onlinePublisher;
     }
 
     @Override
@@ -68,6 +75,21 @@ public class LiveMessageServiceImpl implements LiveMessageService {
                 return msgEntity;
             });
         
+    }
+
+    @Override
+    public Publisher<List<UserOnline>> getUserOnlinePublisher(Role role) {
+        return onlinePublisher.getUserOnlinePublisher(role);
+    }
+
+    @Override
+    public void addUserOnline(UserOnline user) {
+        onlinePublisher.setOnline(user);
+    }
+
+    @Override
+    public void removeUserOnline(UserOnline user) {
+        onlinePublisher.setOffline(user);;
     }
 
 }
