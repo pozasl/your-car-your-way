@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 import org.reactivestreams.Publisher;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
@@ -24,21 +24,23 @@ import com.netflix.graphql.dgs.InputArgument;
  * Live message graphql data fetcher for live chat
  */
 @DgsComponent
-@Secured("IS_AUTHENTICATED_FULLY")
 public class LiveMessageDataFetcher {
 
     private final LiveMessageService messageService;
 
+    
     @Autowired
     public LiveMessageDataFetcher(LiveMessageService messageService) {
         this.messageService = messageService;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DgsSubscription(field = SUBSCRIPTION.NewLiveMessage)
     public Publisher<LiveMessage> newLiveMessage(@InputArgument("toUserId") String toUserId) {
         return messageService.getLiveMessagePublisher(toUserId);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DgsMutation(field = MUTATION.SendLiveMessage)
     public Mono<LiveMessage> SendLiveMessage(@InputArgument("message") LiveMessageInput message) {
         return messageService.addMessage(message);

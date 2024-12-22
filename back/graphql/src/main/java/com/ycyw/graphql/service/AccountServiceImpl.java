@@ -1,6 +1,7 @@
 package com.ycyw.graphql.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ycyw.graphql.entity.AccountEntity;
@@ -22,12 +23,14 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountEntityMapper accountMapper;
     private final AddressRepository addressRepository;
+    private final PasswordEncoder encoder;
 
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, AccountEntityMapper accountMapper, AddressRepository addressRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, AccountEntityMapper accountMapper, AddressRepository addressRepository, PasswordEncoder encoder) {
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;
         this.addressRepository = addressRepository;
+        this.encoder = encoder;
     }
 
     @Override
@@ -43,6 +46,7 @@ public class AccountServiceImpl implements AccountService {
         return this.addressRepository.save(accountToSave.getAddress()).flatMap(address -> {
             accountToSave.setAddressId(address.getId());
             accountToSave.setAddress(address);
+            accountToSave.setPassword(encoder.encode(account.getPassword()));
             return this.accountRepository.save(accountToSave)
             .flatMap(acc -> this.accountRepository.findById(acc.getId()))
             .doOnError(error -> this.addressRepository.delete(address).then(Mono.error(error)))
@@ -63,6 +67,11 @@ public class AccountServiceImpl implements AccountService {
                 account.setAddress(address);
                 return account;
             });
+    }
+
+    @Override
+    public Mono<Account> getAccountByEmail(String email) {
+        return accountRepository.findByEmail(email).map(accountMapper::entityToAccount);
     }
 
 }

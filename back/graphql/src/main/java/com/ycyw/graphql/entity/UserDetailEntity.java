@@ -42,10 +42,4 @@ public class UserDetailEntity implements UserDetails {
         return getEmail();
     }
 
-    @Override
-    public String getPassword() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
-    }
-
 }

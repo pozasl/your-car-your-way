@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { NewCustomerAccountInput, RegisterCustomerGQL } from '../core/modules/graphql/generated';
-import { map, Observable } from 'rxjs';
+import { AccountCredentials, GetMeGQL, GetTokenGQL, NewCustomerAccountInput, RegisterCustomerGQL } from '../core/modules/graphql/generated';
+import { map, Observable, take } from 'rxjs';
+import { UserAccount } from '../models/UserAccount';
 
 
 /**
@@ -11,25 +12,38 @@ import { map, Observable } from 'rxjs';
 })
 export class AuthService {
 
-  constructor(private registerCustomerGQl: RegisterCustomerGQL) { }
+  constructor(
+    private registerCustomerGQl: RegisterCustomerGQL,
+    private getTokenGQl: GetTokenGQL,
+    private getMeGQl: GetMeGQL) { }
 
   /**
    * Register a new customer account
    *
-   * @param account 
-   * @returns an Observable avec 
+   * @param account New customer's account input
+   * @returns Register status message as Observable 
    */
   registerCustomer(account: NewCustomerAccountInput): Observable<string> {
-    return this.registerCustomerGQl.mutate(account).pipe(map(result => result.data!.registerCustomer!.message))
+    return this.registerCustomerGQl.mutate(account).pipe(take(1), map(result => result.data!.registerCustomer!.message))
   }
 
   /**
    * Email + Password login
    * 
-   * @param email 
-   * @param password
+   * @param email Account's email
+   * @param password Account's password
    */
-  login(email: string, password: string) {
+  login(credentials: AccountCredentials): Observable<string> {
+    return this.getTokenGQl.watch({credentials: credentials}).valueChanges.pipe(take(1), map(result => result.data!.token!))
+  }
 
+  /**
+   * Fetch account info from token
+   * 
+   * @param token Jwt token
+   * @returns User's account obervable
+   */
+  getAccountFromToken(token: string): Observable<UserAccount> {
+    return this.getMeGQl.watch().valueChanges.pipe(take(1), map(result => result.data!.me!))
   }
 }

@@ -28,7 +28,7 @@ import com.nimbusds.jose.proc.SecurityContext;
  */
 @Configuration
 @EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
+@EnableReactiveMethodSecurity(useAuthorizationManager=true)
 @EnableConfigurationProperties(RsaKeyProperties.class)
 public class SecurityConfig {
 

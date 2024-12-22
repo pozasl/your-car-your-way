@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.ycyw.graphql.entity.UserDetailEntity;
 import com.ycyw.graphql.repository.AccountRepository;
 
 import reactor.core.publisher.Mono;
@@ -17,12 +18,12 @@ import reactor.core.publisher.Mono;
  * Custom reactive authentification manager to authenticate by email
  */
 @Component
-public class UserDetailsReactiveAuthenticationManager implements ReactiveAuthenticationManager {
+public class UserDetailsAuthManager implements ReactiveAuthenticationManager {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    UserDetailsReactiveAuthenticationManager(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
+    UserDetailsAuthManager(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -31,6 +32,7 @@ public class UserDetailsReactiveAuthenticationManager implements ReactiveAuthent
     public Mono<Authentication> authenticate(Authentication auth) {
        final String email = auth.getName();
         return accountRepository.findByEmail(email)
+            .map(account -> new UserDetailEntity(account.getId(), account.getEmail(), account.getPassword(), account.getRole()))
             .filter(user -> {
                 return passwordEncoder.matches(auth.getCredentials().toString(), user.getPassword());
             })

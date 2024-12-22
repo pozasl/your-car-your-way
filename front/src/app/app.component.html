@@ -1,4 +1,19 @@
 
 <div class="app">
+  @if($isLogged() | async) {
+  <mat-toolbar class="ycyw-toolbar">
+    <img class="logo" src="/assets/ycyw_logo.png" alt="MDD" />
+   
+      <mat-nav-list class="navLink">
+        <a mat-list-item routerLink="agencies" routerLinkActive #rla1="routerLinkActive" [activated]="rla1.isActive" i18n>Agencies</a>
+        <a mat-list-item routerLink="offers" routerLinkActive #rla2="routerLinkActive" [activated]="rla2.isActive" i18n>Offers</a>
+        <a mat-list-item routerLink="live-chat" routerLinkActive #rla2="routerLinkActive" [activated]="rla2.isActive" i18n>Customer service</a>
+        <a mat-list-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+        </a>
+      </mat-nav-list>
+  
+  </mat-toolbar>
+  }
   <router-outlet />
 </div>

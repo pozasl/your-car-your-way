@@ -28,6 +28,19 @@ query GetAccountById($id: ID!) {
   }
 }
 
+query GetToken($credentials: AccountCredentials!) {
+  token(credentials: $credentials)
+}
+
+query GetMe {
+  me {
+    id
+    role
+    firstName
+    lastName
+  }
+}
+
 
 mutation RegisterCustomer( $email: String!, $password: String!, $title: Title!,  $lastName: String!, $firstName: String!, $birthDate: Date!, $address: NewAddressInput!) {
   registerCustomer(
