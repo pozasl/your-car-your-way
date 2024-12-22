@@ -12,14 +12,16 @@ import { NewCustomerAccountInput, Title } from '../../core/modules/graphql/gener
 import { provideNativeDateAdapter } from '@angular/material/core'
 import { CountryCodes } from '../../models/CountryCodes'
 import { KeyValuePipe } from '@angular/common'
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 
 /**
  * Customer registration page
  */
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatCardModule, MatDatepickerModule, KeyValuePipe],
+  imports: [
+      ReactiveFormsModule, MatInputModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatCardModule, MatDatepickerModule,
+      KeyValuePipe, RouterLink],
   providers: [provideNativeDateAdapter()],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -30,8 +32,8 @@ export class RegisterComponent implements OnInit {
   public hide = true
   public titles = Title
   public countryCodes = Object.entries(CountryCodes)
-  .sort((t1, t2) => t1[1] > t2[1] ? 1 :  -1)
-  
+    .sort((t1, t2) => t1[1] > t2[1] ? 1 : -1)
+
 
   constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) { }
 
@@ -44,7 +46,7 @@ export class RegisterComponent implements OnInit {
       title: this.form.value.title,
       firstName: this.form.value.firstname,
       lastName: this.form.value.lastname,
-      birthDate: new Date(this.form.value.birthDate).toISOString().substring(0,10),
+      birthDate: new Date(this.form.value.birthDate).toISOString().substring(0, 10),
       email: this.form.value.email,
       password: this.form.value.password,
       address: {
@@ -58,7 +60,7 @@ export class RegisterComponent implements OnInit {
     }
     this.authService.registerCustomer(customerAccount).subscribe({
       next: (msg) => this.onRegisterSuccess(msg),
-      error: (err) =>  this.onRegisterError(err)
+      error: (err) => this.onRegisterError(err)
     })
   }
 
