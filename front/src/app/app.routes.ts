@@ -7,7 +7,7 @@ import { AuthGuard } from './guards/auth.guards';
 import { UnauthGuard } from './guards/unauth.guards';
 import { OffersComponent } from './pages/offers/offers.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { LiveChatComponent } from './pages/live-chat/live-chat.component';
+import { LiveChatComponent } from './components/live-chat/live-chat.component';
 
 export const routes: Routes = [
     { path: '', title: 'Your Car Your Way', component: HomeComponent, canActivate: [UnauthGuard] },
