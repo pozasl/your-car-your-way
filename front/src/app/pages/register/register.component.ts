@@ -57,8 +57,8 @@ export class RegisterComponent implements OnInit {
       }
     }
     this.authService.registerCustomer(customerAccount).subscribe({
-      next: this.onRegisterSuccess,
-      error: this.onRegisterError
+      next: (msg) => this.onRegisterSuccess(msg),
+      error: (err) =>  this.onRegisterError(err)
     })
   }
 
