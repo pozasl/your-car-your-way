@@ -41,6 +41,14 @@ query GetMe {
   }
 }
 
+query GetUserOnline($role: Role!) {
+  usersOnline(role: $role) {
+    id
+    name
+    role
+  }
+}
+
 
 mutation RegisterCustomer( $email: String!, $password: String!, $title: Title!,  $lastName: String!, $firstName: String!, $birthDate: Date!, $address: NewAddressInput!) {
   registerCustomer(
