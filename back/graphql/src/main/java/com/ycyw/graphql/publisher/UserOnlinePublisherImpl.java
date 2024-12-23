@@ -16,7 +16,7 @@ import reactor.core.publisher.FluxSink;
 @Component
 public class UserOnlinePublisherImpl implements UserOnlinePublisher {
 
-    private CopyOnWriteArrayList<UserOnline> userOnlines;
+    private CopyOnWriteArrayList<UserOnline> userOnlines = new CopyOnWriteArrayList<>();
     private FluxSink<List<UserOnline>> usersStream;
     private ConnectableFlux<List<UserOnline>> usersPublisher;
 
