@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LiveChatComponent } from '../../components/live-chat/live-chat.component';
 import { LiveChatService } from '../../services/live-chat.service';
-import { UserAccount } from '../../models/UserAccount';
 import { SessionService } from '../../services/session.service';
-import { UserOnline, UserOnlineInput } from '../../core/modules/graphql/generated';
-import { Observable, Subscriber, Subscription } from 'rxjs';
+import { UserOnline } from '../../core/modules/graphql/generated';
+import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
