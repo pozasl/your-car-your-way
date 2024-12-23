@@ -427,7 +427,6 @@ export type Subscription = {
 
 
 export type SubscriptionNewLiveMessageArgs = {
-  since?: InputMaybe<Scalars['DateTime']['input']>;
   toUserId: Scalars['ID']['input'];
 };
 
