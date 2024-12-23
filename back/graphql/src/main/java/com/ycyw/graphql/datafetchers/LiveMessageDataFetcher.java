@@ -98,7 +98,8 @@ public class LiveMessageDataFetcher {
     @DgsMutation(field = MUTATION.SetUserOnline)
     public Mono<OperationResult> setUserOnline(@InputArgument("user") UserOnline user, @InputArgument("online") Boolean online) {
         messageService.setUserOnline(user, online);
-        return Mono.just(OperationResult.newBuilder().message(user.getName() + "joined").build());
+        String msg = online ? "joined" : "leaved";
+        return Mono.just(OperationResult.newBuilder().message(String.format("User %s %s", user.getName(), msg)).build());
     }
 
 

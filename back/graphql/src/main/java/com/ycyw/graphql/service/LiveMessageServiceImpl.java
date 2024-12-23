@@ -85,7 +85,7 @@ public class LiveMessageServiceImpl implements LiveMessageService {
 
     @Override
     public void setUserOnline(UserOnline user, Boolean online) {
-        onlinePublisher.setOnline(user, true);
+        onlinePublisher.setOnline(user, online);
     }
 
 }
