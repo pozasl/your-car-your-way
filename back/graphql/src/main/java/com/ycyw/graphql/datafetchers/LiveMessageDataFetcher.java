@@ -36,30 +36,64 @@ public class LiveMessageDataFetcher {
         this.messageService = messageService;
     }
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    // TODO: Fix @PreAuthorize with @DgsSubscription
+
+    /**
+     * Live Chat message subscription
+     *
+     * @param toUserId
+     * @return
+     */
+    // @PreAuthorize("isAuthenticated()")
     @DgsSubscription(field = SUBSCRIPTION.NewLiveMessage)
     public Publisher<LiveMessage> newLiveMessage(@InputArgument("toUserId") String toUserId) {
+        System.out.println(String.format("-> user %s subs to messages", toUserId));
         return messageService.getLiveMessagePublisher(toUserId);
     }
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    /**
+     * Live Chat Customer Service users online subscription
+     *
+     * @return
+     */
+    // @PreAuthorize("hasRole('CUSTOMER')")
     @DgsSubscription(field = SUBSCRIPTION.CustomerServiceOnline)
     public Publisher<List<UserOnline>> customerServiceOnline() {
         return messageService.getUserOnlinePublisher(Role.CUSTOMER_SERVICE);
     }
 
-    @PreAuthorize("hasRole('CUSTOMER_SERVICE')")
+
+    /**
+     * Live Chat Customer users online subscription
+     *
+     * @return
+     */
+    // @PreAuthorize("hasRole('CUSTOMER_SERVICE')")
     @DgsSubscription(field = SUBSCRIPTION.CustomersOnline)
     public Publisher<List<UserOnline>> customerOnline() {
         return messageService.getUserOnlinePublisher(Role.CUSTOMER);
     }
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    /**
+     * Send a live chat message
+     *
+     * @param message
+     * @return
+     */
+    @PreAuthorize("isAuthenticated()")
     @DgsMutation(field = MUTATION.SendLiveMessage)
     public Mono<LiveMessage> SendLiveMessage(@InputArgument("message") LiveMessageInput message) {
+        System.out.println(String.format("-> in coming message from %s", message.getFromUserId()));
         return messageService.addMessage(message);
     }
 
+    /**
+     * Set user online status
+     *
+     * @param user
+     * @param online
+     * @return
+     */
     @PreAuthorize("isAuthenticated()")
     @DgsMutation(field = MUTATION.SetUserOnline)
     public Mono<OperationResult> setUserOnline(@InputArgument("user") UserOnline user, @InputArgument("online") Boolean online) {
