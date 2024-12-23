@@ -88,4 +88,9 @@ public class LiveMessageServiceImpl implements LiveMessageService {
         onlinePublisher.setOnline(user, online);
     }
 
+    @Override
+    public Flux<UserOnline> getUsersOnlineWithRole(Role role) {
+        return onlinePublisher.getUsersOnlineWithRole(role);
+    }
+
 }

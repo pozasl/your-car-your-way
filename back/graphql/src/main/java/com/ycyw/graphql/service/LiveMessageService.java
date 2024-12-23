@@ -56,5 +56,12 @@ public interface LiveMessageService {
      * @return
      */
     void setUserOnline(UserOnline user, Boolean online);
+
+    /**
+     * Returns the Users online list with role 
+     * @param role Users'role
+     * @return
+     */
+    Flux<UserOnline> getUsersOnlineWithRole(Role role);
     
 }

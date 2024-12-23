@@ -41,7 +41,7 @@ public class UserOnlinePublisherImpl implements UserOnlinePublisher {
     @Override
     public Publisher<List<UserOnline>> getUserOnlinePublisher(Role role) {
         return usersPublisher.map(users -> {
-            users.removeIf(user -> filterUserByRole(user, role));
+            users.removeIf(user -> !filterUserByRole(user, role));
             return users;
         });
     }
@@ -54,7 +54,7 @@ public class UserOnlinePublisherImpl implements UserOnlinePublisher {
     }
 
     private Boolean filterUserByRole(UserOnline user, Role role) {
-        return !user.getRole().equals(role);
+        return user.getRole().equals(role);
     }
 
 }

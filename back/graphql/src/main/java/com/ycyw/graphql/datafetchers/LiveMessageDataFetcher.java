@@ -1,5 +1,7 @@
 package com.ycyw.graphql.datafetchers;
 
+import com.ycyw.graphql.generated.DgsConstants.QUERY;
+import com.ycyw.graphql.generated.DgsConstants;
 import com.ycyw.graphql.generated.DgsConstants.MUTATION;
 import com.ycyw.graphql.generated.DgsConstants.SUBSCRIPTION;
 import com.ycyw.graphql.generated.types.LiveMessage;
@@ -9,6 +11,7 @@ import com.ycyw.graphql.generated.types.Role;
 import com.ycyw.graphql.generated.types.UserOnline;
 import com.ycyw.graphql.service.LiveMessageService;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.netflix.graphql.dgs.DgsComponent;
+import com.netflix.graphql.dgs.DgsData;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsSubscription;
 import com.netflix.graphql.dgs.InputArgument;
@@ -100,6 +104,12 @@ public class LiveMessageDataFetcher {
         messageService.setUserOnline(user, online);
         String msg = online ? "joined" : "leaved";
         return Mono.just(OperationResult.newBuilder().message(String.format("User %s %s", user.getName(), msg)).build());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.UsersOnline)
+    public Flux<UserOnline> getUsersOnline(@InputArgument("role") Role role) {
+        return messageService.getUsersOnlineWithRole(role);
     }
 
 
