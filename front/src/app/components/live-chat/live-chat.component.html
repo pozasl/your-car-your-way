@@ -1,1 +1,25 @@
-<p>live-chat works!</p>
+<div class="live-chat">
+    <mat-nav-list class="users-online">
+        @for(user of users; track user.id) {
+            <a mat-list-item (click)="onChatUserClick(user)">
+              <mat-icon>user</mat-icon>{{ user.name}}
+            </a>
+        }
+    </mat-nav-list>
+    @if(true) {
+        <div class="message-list">
+            @for(message of messages; track message.at) {
+            <mat-card color="tertiary" appearance="outlined" class="custom-mat-card">
+                <mat-card-header class="dateAuthor">
+                    <span>{{message.from.firstName}} {{message.from.lastName}}</span>
+                    <span i18n>At</span>
+                    <span>{{message.at | date}}</span>
+                </mat-card-header>
+                <mat-card-content>
+                    {{message.content}}
+                </mat-card-content>
+            </mat-card>
+            }
+        </div>
+    }
+</div>
