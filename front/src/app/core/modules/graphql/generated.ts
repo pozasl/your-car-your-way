@@ -394,8 +394,10 @@ export type Query = {
   _service: _Service;
   account?: Maybe<Account>;
   accounts?: Maybe<Array<Account>>;
+  liveMessages?: Maybe<Array<LiveMessage>>;
   me?: Maybe<Account>;
   token?: Maybe<Scalars['String']['output']>;
+  usersOnline?: Maybe<Array<UserOnline>>;
 };
 
 
@@ -409,8 +411,19 @@ export type QueryAccountArgs = {
 };
 
 
+export type QueryLiveMessagesArgs = {
+  customerId: Scalars['ID']['input'];
+  customerServiceId: Scalars['ID']['input'];
+};
+
+
 export type QueryTokenArgs = {
   credentials: AccountCredentials;
+};
+
+
+export type QueryUsersOnlineArgs = {
+  role: Role;
 };
 
 export enum Role {
@@ -513,6 +526,13 @@ export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'Account', id: string, role: Role, firstName: string, lastName: string } | null };
+
+export type GetUserOnlineQueryVariables = Exact<{
+  role: Role;
+}>;
+
+
+export type GetUserOnlineQuery = { __typename?: 'Query', usersOnline?: Array<{ __typename?: 'UserOnline', id: string, name: string, role: Role }> | null };
 
 export type RegisterCustomerMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -647,6 +667,26 @@ export const GetMeDocument = gql`
   })
   export class GetMeGQL extends Apollo.Query<GetMeQuery, GetMeQueryVariables> {
     document = GetMeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetUserOnlineDocument = gql`
+    query GetUserOnline($role: Role!) {
+  usersOnline(role: $role) {
+    id
+    name
+    role
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetUserOnlineGQL extends Apollo.Query<GetUserOnlineQuery, GetUserOnlineQueryVariables> {
+    document = GetUserOnlineDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
