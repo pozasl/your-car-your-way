@@ -47,7 +47,7 @@ type Mutation {
 }
 
 type Subscription {
-  newLiveMessage(toUserId: ID!, since: DateTime): LiveMessage
+  newLiveMessage(toUserId: ID!): LiveMessage
   customersOnline: [UserOnline!]
   customerServiceOnline: [UserOnline!]
 }
