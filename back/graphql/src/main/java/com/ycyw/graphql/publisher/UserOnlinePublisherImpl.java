@@ -1,5 +1,6 @@
 package com.ycyw.graphql.publisher;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -40,9 +41,20 @@ public class UserOnlinePublisherImpl implements UserOnlinePublisher {
     @Override
     public Publisher<List<UserOnline>> getUserOnlinePublisher(Role role) {
         return usersPublisher.map(users -> {
-            users.removeIf(user -> !user.getRole().equals(role));
+            users.removeIf(user -> filterUserByRole(user, role));
             return users;
         });
+    }
+
+    @Override
+    public Flux<UserOnline> getUsersOnlineWithRole(Role role) {
+        ArrayList<UserOnline> temp = new ArrayList<>(userOnlines);
+        temp.removeIf(user -> filterUserByRole(user, role));
+        return Flux.fromIterable(temp);
+    }
+
+    private Boolean filterUserByRole(UserOnline user, Role role) {
+        return !user.getRole().equals(role);
     }
 
 }
