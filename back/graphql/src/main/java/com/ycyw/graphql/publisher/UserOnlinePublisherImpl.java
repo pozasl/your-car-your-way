@@ -31,30 +31,30 @@ public class UserOnlinePublisherImpl implements UserOnlinePublisher {
 
     @Override
     public void setOnline(UserOnline user, Boolean online) {
-        if (online)
-            userOnlines.add(user);
-        else
+        if (online) {
+            userOnlines.addIfAbsent(user);
+        } else {
             userOnlines.remove(user);
+        }
+        // userOnlines.forEach(u -> System.out.println(String.format("== [%s]", u.getId())));
         usersStream.next(userOnlines);
+
     }
 
     @Override
     public Publisher<List<UserOnline>> getUserOnlinePublisher(Role role) {
-        return usersPublisher.map(users -> {
-            users.removeIf(user -> !filterUserByRole(user, role));
-            return users;
-        });
+        return usersPublisher.map(users -> filterUsersByRole(users, role));
     }
 
     @Override
     public Flux<UserOnline> getUsersOnlineWithRole(Role role) {
-        ArrayList<UserOnline> temp = new ArrayList<>(userOnlines);
-        temp.removeIf(user -> filterUserByRole(user, role));
-        return Flux.fromIterable(temp);
+        return Flux.fromIterable(filterUsersByRole(userOnlines, role));
     }
 
-    private Boolean filterUserByRole(UserOnline user, Role role) {
-        return user.getRole().equals(role);
+    private ArrayList<UserOnline> filterUsersByRole(List<UserOnline> users, Role role) {
+        ArrayList<UserOnline> tmp = new ArrayList<>(users);
+        tmp.removeIf(user -> !user.getRole().equals(role));
+        return tmp;
     }
 
 }
