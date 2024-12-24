@@ -93,4 +93,12 @@ public class LiveMessageServiceImpl implements LiveMessageService {
         return onlinePublisher.getUsersOnlineWithRole(role);
     }
 
+    @Override
+    public Flux<LiveMessage> getMessageBetween(String account1Id, String account2Id) {
+        return Flux.merge(
+            this.messageRepository.findByFromUserIdAndToUserId(Long.parseLong(account1Id), Long.parseLong(account2Id)),
+            this.messageRepository.findByFromUserIdAndToUserId(Long.parseLong(account2Id), Long.parseLong(account1Id))
+        ).map(messageMapper::entityToLiveMessage);
+    }
+
 }

@@ -106,10 +106,29 @@ public class LiveMessageDataFetcher {
         return Mono.just(OperationResult.newBuilder().message(String.format("User %s %s", user.getName(), msg)).build());
     }
 
+    /**
+     * Get user onlines with role
+     * @param role the User role
+     * @return Filtered Online Users flux
+     */
     @PreAuthorize("isAuthenticated()")
     @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.UsersOnline)
     public Flux<UserOnline> getUsersOnline(@InputArgument("role") Role role) {
         return messageService.getUsersOnlineWithRole(role);
+    }
+
+
+    /**
+     * Get recorded live messages between two users
+     *
+     * @param customerId The customer id
+     * @param customerServiceId The customer service staff id
+     * @return The messages list
+     */
+    @PreAuthorize("isAuthenticated()")
+    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.LiveMessages)
+    public Flux<LiveMessage> getLiveMessages(@InputArgument("customerId") String customerId, @InputArgument("customerServiceId") String customerServiceId) {
+        return messageService.getMessageBetween(customerId, customerServiceId);
     }
 
 

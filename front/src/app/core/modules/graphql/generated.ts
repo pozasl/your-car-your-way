@@ -527,6 +527,14 @@ export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'Account', id: string, role: Role, firstName: string, lastName: string } | null };
 
+export type GetLiveMessagesQueryVariables = Exact<{
+  customerId: Scalars['ID']['input'];
+  customerServiceId: Scalars['ID']['input'];
+}>;
+
+
+export type GetLiveMessagesQuery = { __typename?: 'Query', liveMessages?: Array<{ __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', id: string, title: Title, firstName: string, lastName: string, role: Role }, to: { __typename?: 'Account', id: string, title: Title, firstName: string, lastName: string, role: Role } }> | null };
+
 export type GetUserOnlineQueryVariables = Exact<{
   role: Role;
 }>;
@@ -667,6 +675,39 @@ export const GetMeDocument = gql`
   })
   export class GetMeGQL extends Apollo.Query<GetMeQuery, GetMeQueryVariables> {
     document = GetMeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetLiveMessagesDocument = gql`
+    query GetLiveMessages($customerId: ID!, $customerServiceId: ID!) {
+  liveMessages(customerId: $customerId, customerServiceId: $customerServiceId) {
+    from {
+      id
+      title
+      firstName
+      lastName
+      role
+    }
+    to {
+      id
+      title
+      firstName
+      lastName
+      role
+    }
+    at
+    content
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetLiveMessagesGQL extends Apollo.Query<GetLiveMessagesQuery, GetLiveMessagesQueryVariables> {
+    document = GetLiveMessagesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

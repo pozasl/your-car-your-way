@@ -41,6 +41,27 @@ query GetMe {
   }
 }
 
+query GetLiveMessages($customerId: ID!, $customerServiceId: ID!) {
+  liveMessages(customerId: $customerId, customerServiceId: $customerServiceId) {
+    from {
+      id
+      title
+      firstName
+      lastName
+      role
+    }
+    to {
+      id
+      title
+      firstName
+      lastName
+      role
+    }
+    at
+    content
+  }
+}
+
 query GetUserOnline($role: Role!) {
   usersOnline(role: $role) {
     id

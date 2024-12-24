@@ -12,5 +12,7 @@ public interface LiveMessageRepository extends ReactiveCrudRepository<LiveMessag
     Mono<LiveMessageEntity> findById(Long id);
 
     Flux<LiveMessageEntity> findByFromUserId(long fromUserId);
+
+    Flux<LiveMessageEntity> findByFromUserIdAndToUserId(long fromUserId, long toUserId);
     
 }
