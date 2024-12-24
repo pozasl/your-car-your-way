@@ -30,7 +30,7 @@
         </div>
         <form class="message-form" [formGroup]="form" (ngSubmit)="submit()">
             <mat-form-field appearance="outline" class="w100p">
-                <input matInput placeholder="" formControlName="message">
+                <input matInput placeholder="" formControlName="message" autofocus>
             </mat-form-field>
             <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid" i18n>Send</button>
         </form>

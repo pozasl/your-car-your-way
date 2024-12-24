@@ -3,12 +3,11 @@ import { LiveChatComponent } from '../../components/live-chat/live-chat.componen
 import { LiveChatService } from '../../services/live-chat.service';
 import { SessionService } from '../../services/session.service';
 import { LiveMessage, Role, UserOnline } from '../../core/modules/graphql/generated';
-import { merge, Observable, Subscription } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-customer-live-chat',
-  imports: [LiveChatComponent, AsyncPipe],
+  imports: [LiveChatComponent],
   templateUrl: './customer-live-chat.component.html',
   styleUrl: './customer-live-chat.component.css'
 })
@@ -17,6 +16,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
   userOnlines: UserOnline[] = []
   subs: Subscription[] = []
   messages: LiveMessage[] = []
+  to?: UserOnline;
 
   constructor(private sessionService: SessionService, private liveChatService: LiveChatService) {}
 
@@ -27,6 +27,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
         this.userOnlines = users
         console.log("Users updated", users)
         this.subToOnlineUsersChange()
+        this.subToNewMessages()
         this.setOnline()
       },
       error: console.error,
@@ -39,7 +40,8 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
   }
 
   public getMessages(withUser: UserOnline):void {
-    console.log("fetching messages from", withUser)
+     console.log("fetching messages from", withUser)
+     this.to = withUser
      const isCustomer = withUser.role == Role.Customer
      const customerId =  isCustomer ? withUser.id : this.sessionService.account!.id
      const customerServiceId = isCustomer ? this.sessionService.account!.id : withUser.id
@@ -47,6 +49,17 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
       next: console.log,
       error: console.error
      })
+  }
+
+  public sendMessage(message: string) {
+    console.log("sending message", message)
+    if (this.to !== undefined) {
+      this.liveChatService.sendMessage(message, this.sessionService.account!.id, this.to.id).subscribe({
+        next: msg => this.messages.push(msg as LiveMessage),
+        error: console.error
+      })
+    }
+    
   }
 
   private subToOnlineUsersChange():void {
@@ -65,7 +78,12 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
   }
 
   private subToNewMessages():void {
-    
+    this.subs.push(
+      this.liveChatService.subToIncommingMessage(this.sessionService.account!.id).subscribe({
+        next: (msg) => this.messages.push(msg),
+        error: console.error
+      })
+    )
   }
 
   @HostListener('window:beforeunload')

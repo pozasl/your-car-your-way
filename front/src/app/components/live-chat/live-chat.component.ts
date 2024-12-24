@@ -43,7 +43,7 @@ export class LiveChatComponent implements OnInit{
   onUserSelect = new EventEmitter<UserOnline>();
 
   @Output()
-  sendMessageEvent = new EventEmitter<string>();
+  onMessageSubmit = new EventEmitter<string>();
 
   onChatUserClick(user: UserOnline):void {
     this.to = user;
@@ -51,7 +51,8 @@ export class LiveChatComponent implements OnInit{
   }
 
   submit() {
-    this.sendMessageEvent.emit(this.form.value.message)
+    this.onMessageSubmit.emit(this.form.value.message)
+    this.form.reset();
   }
 
 }
