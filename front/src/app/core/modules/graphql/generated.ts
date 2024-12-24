@@ -577,7 +577,7 @@ export type MessageSubSubscriptionVariables = Exact<{
 }>;
 
 
-export type MessageSubSubscription = { __typename?: 'Subscription', newLiveMessage?: { __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', firstName: string }, to: { __typename?: 'Account', firstName: string } } | null };
+export type MessageSubSubscription = { __typename?: 'Subscription', newLiveMessage?: { __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', id: string, firstName: string, lastName: string }, to: { __typename?: 'Account', id: string, firstName: string, lastName: string } } | null };
 
 export type OnlineCustomerSubSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -802,10 +802,14 @@ export const MessageSubDocument = gql`
     at
     content
     from {
+      id
       firstName
+      lastName
     }
     to {
+      id
       firstName
+      lastName
     }
   }
 }
