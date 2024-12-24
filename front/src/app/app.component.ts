@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     this.authService.getAccountFromToken(this.sessionService.token!).pipe(take(1))
     .subscribe({
       next: (usr => this.sessionService.login(usr)),
-      error: (err => console.log(err))
+      error: (err => this.sessionService.logout())
     })
   }
 }
