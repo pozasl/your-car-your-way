@@ -12,7 +12,6 @@ import { SessionService } from '../services/session.service';
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   const token = inject(SessionService).token
-  console.log("JWT", token)
 
   if(!token) {
     return next(req)
