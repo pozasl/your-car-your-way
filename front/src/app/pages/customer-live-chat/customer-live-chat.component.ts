@@ -2,7 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { LiveChatComponent } from '../../components/live-chat/live-chat.component';
 import { LiveChatService } from '../../services/live-chat.service';
 import { SessionService } from '../../services/session.service';
-import { Role, UserOnline } from '../../core/modules/graphql/generated';
+import { LiveMessage, Role, UserOnline } from '../../core/modules/graphql/generated';
 import { merge, Observable, Subscription } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
@@ -16,6 +16,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
 
   userOnlines: UserOnline[] = []
   subs: Subscription[] = []
+  messages: LiveMessage[] = []
 
   constructor(private sessionService: SessionService, private liveChatService: LiveChatService) {}
 
@@ -37,6 +38,17 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
     this.disconnectLiveChat()
   }
 
+  public getMessages(withUser: UserOnline):void {
+    console.log("fetching messages from", withUser)
+     const isCustomer = withUser.role == Role.Customer
+     const customerId =  isCustomer ? withUser.id : this.sessionService.account!.id
+     const customerServiceId = isCustomer ? this.sessionService.account!.id : withUser.id
+     this.liveChatService.getMessages(customerId, customerServiceId).subscribe({
+      next: console.log,
+      error: console.error
+     })
+  }
+
   private subToOnlineUsersChange():void {
     this.subs.push(this.liveChatService.subOnlineUsersFor(this.sessionService.account!.role).subscribe({
       next: users => this.userOnlines = users,
@@ -50,6 +62,10 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
       next: console.log,
       error: console.error,
     })
+  }
+
+  private subToNewMessages():void {
+    
   }
 
   @HostListener('window:beforeunload')

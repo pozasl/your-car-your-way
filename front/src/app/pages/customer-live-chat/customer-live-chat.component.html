@@ -1,2 +1,2 @@
 <p>customer-live-chat works!</p>
-<app-live-chat [usersOnline]="userOnlines" />
+<app-live-chat [usersOnline]="userOnlines" [liveMessages]="messages" (onUserSelect)="getMessages($event)"/>

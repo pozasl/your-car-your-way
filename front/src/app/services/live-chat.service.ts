@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GetUserOnlineGQL, OnlineCustomerServiceSubGQL, OnlineCustomerSubGQL, Role, SetUserOnlineGQL, UserOnline, UserOnlineInput } from '../core/modules/graphql/generated';
+import { GetLiveMessagesGQL, GetUserOnlineGQL, LiveMessage, MessageSubGQL, OnlineCustomerServiceSubGQL, OnlineCustomerSubGQL, Role, SendMessageGQL, SetUserOnlineGQL, UserOnline, UserOnlineInput } from '../core/modules/graphql/generated';
 import { UserAccount } from '../models/UserAccount';
 import { map, Observable, take } from 'rxjs';
 
@@ -14,6 +14,9 @@ export class LiveChatService {
     private usersOnline: GetUserOnlineGQL,
     private onlineSubGQL: OnlineCustomerSubGQL,
     private onlineCSSubGQL: OnlineCustomerServiceSubGQL,
+    private sendMessageGQL: SendMessageGQL,
+    private newMessageSubGQL: MessageSubGQL,
+    private getLivesMessages: GetLiveMessagesGQL
   ) {}
 
   setOnline(user: UserAccount, isOnline: boolean) {
@@ -34,5 +37,9 @@ export class LiveChatService {
       return this.onlineSubGQL.subscribe().pipe(map(result => result.data!.customersOnline!))
     else
       return this.onlineCSSubGQL.subscribe().pipe(map(sub => sub.data!.customerServiceOnline!))
+  }
+
+  getMessages(customerId: string, customerServiceId: string): Observable<LiveMessage[]> {
+    return this.getLivesMessages.watch({customerId, customerServiceId}).valueChanges.pipe(take(1),map(result => result.data!.liveMessages!.map(m => m as LiveMessage)))
   }
 }
