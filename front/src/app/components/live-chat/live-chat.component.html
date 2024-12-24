@@ -17,10 +17,10 @@
         <div class="message-list">
             @for(message of messages; track message.at) {
             <mat-card color="tertiary" appearance="outlined" class="custom-mat-card">
-                <mat-card-header class="dateAuthor">
+                <mat-card-header class="from-header">
                     <span>{{message.from.firstName}} {{message.from.lastName}}</span>
-                    <span i18n>At</span>
-                    <span>{{message.at | date}}</span>
+                    <span i18n>wrote at</span>
+                    <span>{{message.at | date:'hh:mm'}}</span>
                 </mat-card-header>
                 <mat-card-content>
                     {{message.content}}
