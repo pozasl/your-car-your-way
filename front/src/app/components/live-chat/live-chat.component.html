@@ -2,11 +2,18 @@
     <mat-nav-list class="users-online">
         @for(user of users; track user.id) {
             <a mat-list-item (click)="onChatUserClick(user)">
-              <mat-icon>user</mat-icon>{{ user.name}}
+            @if(user.role=="CUSTOMER_SERVICE") {
+                <mat-icon>support_agent</mat-icon>
+            }
+            @else {
+              <mat-icon>person</mat-icon>
+            }
+              {{ user.name}}
             </a>
         }
     </mat-nav-list>
-    @if(true) {
+    <div class="discussion">
+    @if(to != null) {
         <div class="message-list">
             @for(message of messages; track message.at) {
             <mat-card color="tertiary" appearance="outlined" class="custom-mat-card">
@@ -21,5 +28,12 @@
             </mat-card>
             }
         </div>
+        <form class="message-form" [formGroup]="form" (ngSubmit)="submit()">
+            <mat-form-field appearance="outline" class="w100p">
+                <input matInput placeholder="" formControlName="message">
+            </mat-form-field>
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid" i18n>Send</button>
+        </form>
     }
+    </div>
 </div>
