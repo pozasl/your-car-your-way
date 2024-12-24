@@ -51,6 +51,7 @@ public class LiveMessageServiceImpl implements LiveMessageService {
     @Override
     public Flux<LiveMessage> getMessageFromUserId(String accountId) {
         return messageRepository.findByFromUserId(Long.parseLong(accountId))
+                .flatMap(this::addAccountsToMessage)
                 .map(messageMapper::entityToLiveMessage);
     }
 
@@ -78,6 +79,17 @@ public class LiveMessageServiceImpl implements LiveMessageService {
 
     }
 
+    private Mono<LiveMessageEntity> addAccountsToMessage(LiveMessageEntity message) {
+        return Mono.zip(
+            accountRepository.findById(message.getFromUserId()),
+            accountRepository.findById(message.getToUserId()))
+            .map(t-> {
+                message.setFromUser(t.getT1());
+                message.setToUser(t.getT2());
+                return message;
+            });
+    }
+
     @Override
     public Publisher<List<UserOnline>> getUserOnlinePublisher(Role role) {
         return onlinePublisher.getUserOnlinePublisher(role);
@@ -98,7 +110,9 @@ public class LiveMessageServiceImpl implements LiveMessageService {
         return Flux.merge(
             this.messageRepository.findByFromUserIdAndToUserId(Long.parseLong(account1Id), Long.parseLong(account2Id)),
             this.messageRepository.findByFromUserIdAndToUserId(Long.parseLong(account2Id), Long.parseLong(account1Id))
-        ).map(messageMapper::entityToLiveMessage);
+        )
+        .flatMap(this::addAccountsToMessage)
+        .map(messageMapper::entityToLiveMessage);
     }
 
 }
