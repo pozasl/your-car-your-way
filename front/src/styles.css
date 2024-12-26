@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.center {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.main {
+  margin: 1em;
+}
+
+.register .form-flex-container {
+  max-width: 20em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-wrap: wrap;
+  row-gap: 2em;
+  column-gap: 2em;
+}
+
+.formflex-container>* {
+  flex: 1 1 0;
+  max-width: 80vw;
+}
+
+.logo {
+  width: 5em;
+}
+
+.w100p {
+  width: 100%;
+}
+
+.auth {
+  display: flex;
+  justify-content: center;
+}

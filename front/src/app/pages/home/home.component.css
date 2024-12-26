@@ -1,0 +1,26 @@
+.center {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  img.bigLogo {
+    max-width: 80vmin;
+    margin-bottom: 4em  ;
+  }
+  
+  .center-flex-container {
+    max-width: 80vw;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    row-gap: 2em;
+    column-gap: 2em;
+  }
+  
+  .center-flex-container > * {
+    width: 20em;
+  }
+  
