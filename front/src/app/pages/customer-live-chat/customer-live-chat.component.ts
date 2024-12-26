@@ -5,23 +5,26 @@ import { SessionService } from '../../services/session.service';
 import { LiveMessage, Role, UserOnline } from '../../core/modules/graphql/generated';
 import { filter, Subscription } from 'rxjs';
 
+/**
+ * Customer service live chat page
+ */
 @Component({
   selector: 'app-customer-live-chat',
   imports: [LiveChatComponent],
   templateUrl: './customer-live-chat.component.html',
   styleUrl: './customer-live-chat.component.css'
 })
-export class CustomerLiveChatComponent implements OnInit, OnDestroy{
+export class CustomerLiveChatComponent implements OnInit, OnDestroy {
 
   userOnlines: UserOnline[] = []
   subs: Subscription[] = []
   messages: LiveMessage[] = []
   to?: UserOnline;
 
-  constructor(private sessionService: SessionService, private liveChatService: LiveChatService) {}
+  constructor(private sessionService: SessionService, private liveChatService: LiveChatService) { }
 
   ngOnInit(): void {
-    const seekRole:Role = this.sessionService.account!.role == Role.Customer ? Role.CustomerService : Role.Customer
+    const seekRole: Role = this.sessionService.account!.role == Role.Customer ? Role.CustomerService : Role.Customer
     this.liveChatService.getUserOnline(seekRole).subscribe({
       next: users => {
         this.userOnlines = users
@@ -34,7 +37,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
       complete: () => console.log("getUserOnline::complete")
     })
   }
-  
+
   ngOnDestroy(): void {
     this.disconnectLiveChat()
   }
@@ -44,16 +47,16 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
    * 
    * @param withUser 
    */
-  public getMessages(withUser: UserOnline):void {
-     console.log("fetching messages from", withUser)
-     this.to = withUser
-     const isCustomer = withUser.role == Role.Customer
-     const customerId =  isCustomer ? withUser.id : this.sessionService.account!.id
-     const customerServiceId = isCustomer ? this.sessionService.account!.id : withUser.id
-     this.liveChatService.getMessages(customerId, customerServiceId).subscribe({
+  public getMessages(withUser: UserOnline): void {
+    console.log("fetching messages from", withUser)
+    this.to = withUser
+    const isCustomer = withUser.role == Role.Customer
+    const customerId = isCustomer ? withUser.id : this.sessionService.account!.id
+    const customerServiceId = isCustomer ? this.sessionService.account!.id : withUser.id
+    this.liveChatService.getMessages(customerId, customerServiceId).subscribe({
       next: messages => this.messages = messages,
       error: console.error
-     })
+    })
   }
 
   /**
@@ -69,13 +72,13 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
         error: console.error
       })
     }
-    
+
   }
 
   /**
    * Users online list update subscription
    */
-  private subToOnlineUsersChange():void {
+  private subToOnlineUsersChange(): void {
     this.subs.push(this.liveChatService.subOnlineUsersFor(this.sessionService.account!.role).subscribe({
       next: users => this.userOnlines = users,
       error: console.error,
@@ -86,7 +89,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
   /**
    * Set logged user status as online
    */
-  private setOnline():void {
+  private setOnline(): void {
     this.liveChatService.setOnline(this.sessionService.account!, true).subscribe({
       next: console.log,
       error: console.error,
@@ -96,22 +99,32 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
   /**
    * Incomming new message subscription
    */
-  private subToNewMessages():void {
+  private subToNewMessages(): void {
     this.subs.push(
       this.liveChatService.subToIncommingMessage(this.sessionService.account!.id)
-      // Filtering message from selected user's conversation
-      .pipe(filter(msg=>msg.from.id == this.to?.id))
-      .subscribe({
-        next: (msg) => this.messages.unshift(msg),
-        error: console.error
-      })
+        // Filtering message from selected user's conversation
+        .pipe(filter(msg => msg.from.id == this.to?.id))
+        .subscribe({
+          next: (msg) => this.messages.unshift(msg),
+          error: console.error
+        })
     )
+  }
+
+  @HostListener('window:unload')
+  onUnload() {
+    this.disconnectLiveChat()
+  }
+
+
+  @HostListener('window:beforeunload')
+  onBeforeUnload() {
+    this.disconnectLiveChat()
   }
 
   /**
    * Disconnect from the chat and remove all subscriptions
    */
-  @HostListener('window:beforeunload')
   disconnectLiveChat() {
     this.subs.forEach(sub => sub.unsubscribe())
     this.liveChatService.setOnline(this.sessionService.account!, false).subscribe({
