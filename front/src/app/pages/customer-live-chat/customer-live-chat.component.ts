@@ -111,15 +111,13 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy {
     )
   }
 
-  @HostListener('window:unload')
-  onUnload() {
-    this.disconnectLiveChat()
-  }
-
-
+  /**
+   * Page close listener
+   */
   @HostListener('window:beforeunload')
   onBeforeUnload() {
     this.disconnectLiveChat()
+    console.log('window:beforeunload')
   }
 
   /**
@@ -127,7 +125,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy {
    */
   disconnectLiveChat() {
     this.subs.forEach(sub => sub.unsubscribe())
-    this.liveChatService.setOnline(this.sessionService.account!, false).subscribe({
+    return this.liveChatService.setOnline(this.sessionService.account!, false).subscribe({
       next: console.log,
       error: console.error,
     })
