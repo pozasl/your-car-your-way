@@ -65,7 +65,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
     console.log("sending message", message)
     if (this.to !== undefined) {
       this.liveChatService.sendMessage(message, this.sessionService.account!.id, this.to.id).subscribe({
-        next: msg => this.messages.push(msg as LiveMessage),
+        next: msg => this.messages.unshift(msg as LiveMessage),
         error: console.error
       })
     }
@@ -102,7 +102,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy{
       // Filtering message from selected user's conversation
       .pipe(filter(msg=>msg.from.id == this.to?.id))
       .subscribe({
-        next: (msg) => this.messages.push(msg),
+        next: (msg) => this.messages.unshift(msg),
         error: console.error
       })
     )

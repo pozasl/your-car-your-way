@@ -16,7 +16,7 @@ public interface LiveMessageRepository extends ReactiveCrudRepository<LiveMessag
 
     Flux<LiveMessageEntity> findByFromUserIdAndToUserId(long fromUserId, long toUserId);
 
-    @Query("SELECT * FROM live_message WHERE from_user_id in (:user1Id, :user2Id) and to_user_id in (:user2Id, :user1Id) ORDER BY id")
+    @Query("SELECT * FROM live_message WHERE from_user_id in (:user1Id, :user2Id) and to_user_id in (:user2Id, :user1Id) ORDER BY id DESC")
     Flux<LiveMessageEntity> findBeetwenUsersOrderById(long user1Id, long user2Id);
     
 }
