@@ -1,7 +1,7 @@
 <div class="live-chat">
-    <mat-nav-list class="users-online">
+    <mat-nav-list class="users-online" color="primary">
         @for(user of users; track user.id) {
-            <a mat-list-item (click)="onChatUserClick(user)">
+            <a mat-list-item (click)="onChatUserClick(user)" [activated]="to==user">
             @if(user.role=="CUSTOMER_SERVICE") {
                 <mat-icon>support_agent</mat-icon>
             }
@@ -16,7 +16,9 @@
     @if(to != null) {
         <div class="message-list">
             @for(message of messages; track message.at) {
-            <mat-card color="tertiary" appearance="outlined" class="custom-mat-card">
+            <mat-card color="tertiary" appearance="outlined" class="custom-mat-card" [class.incoming]="message.from.id == to.id"
+            [class.outgoing]="message.from.id != to.id"
+            >
                 <mat-card-header class="from-header">
                     <span>{{message.from.firstName}} {{message.from.lastName}}</span>
                     <span i18n>wrote at</span>
