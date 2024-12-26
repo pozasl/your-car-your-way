@@ -35,7 +35,8 @@ type Query {
     accounts: [Account!]
     token(credentials: AccountCredentials!): String
     me: Account
-    #liveMessage(toUserId: ID!, since:DateTime): LiveMessage
+    usersOnline(role: Role!): [UserOnline!]
+    liveMessages(customerId: ID!, customerServiceId: ID!): [LiveMessage!]
 }
 
 type Mutation {
@@ -43,16 +44,24 @@ type Mutation {
     # updateAccount(account: CustomerAccountInput!): Void
     # deleteAccount(account: CustomerAccountInput!): Void
     sendLiveMessage(message: LiveMessageInput!): LiveMessage
-
+    setUserOnline(user: UserOnlineInput!, online: Boolean): OperationResult
 }
 
 type Subscription {
-  newLiveMessage(toUserId: ID!, since: DateTime): LiveMessage
+  newLiveMessage(toUserId: ID!): LiveMessage
+  customersOnline: [UserOnline!]
+  customerServiceOnline: [UserOnline!]
 }
 
 input AccountCredentials {
     email: String!
     password: String!
+}
+
+input UserOnlineInput {
+    id: ID!
+    name: String!
+    role: Role!
 }
 
 input NewAccounInput {
@@ -112,6 +121,12 @@ type Account @key(fields: "id"){
     role: Role!
     createdAt: DateTime
     updatedAt: DateTime
+}
+
+type UserOnline {
+    id: ID!
+    name: String!
+    role: Role!
 }
 
 type Agency @key(fields: "id"){

@@ -336,6 +336,7 @@ export type Mutation = {
    *  deleteAccount(account: CustomerAccountInput!): Void
    */
   sendLiveMessage?: Maybe<LiveMessage>;
+  setUserOnline?: Maybe<OperationResult>;
 };
 
 
@@ -346,6 +347,12 @@ export type MutationRegisterCustomerArgs = {
 
 export type MutationSendLiveMessageArgs = {
   message: LiveMessageInput;
+};
+
+
+export type MutationSetUserOnlineArgs = {
+  online?: InputMaybe<Scalars['Boolean']['input']>;
+  user: UserOnlineInput;
 };
 
 export type NewAccounInput = {
@@ -387,8 +394,10 @@ export type Query = {
   _service: _Service;
   account?: Maybe<Account>;
   accounts?: Maybe<Array<Account>>;
+  liveMessages?: Maybe<Array<LiveMessage>>;
   me?: Maybe<Account>;
   token?: Maybe<Scalars['String']['output']>;
+  usersOnline?: Maybe<Array<UserOnline>>;
 };
 
 
@@ -402,8 +411,19 @@ export type QueryAccountArgs = {
 };
 
 
+export type QueryLiveMessagesArgs = {
+  customerId: Scalars['ID']['input'];
+  customerServiceId: Scalars['ID']['input'];
+};
+
+
 export type QueryTokenArgs = {
   credentials: AccountCredentials;
+};
+
+
+export type QueryUsersOnlineArgs = {
+  role: Role;
 };
 
 export enum Role {
@@ -413,12 +433,13 @@ export enum Role {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  customerServiceOnline?: Maybe<Array<UserOnline>>;
+  customersOnline?: Maybe<Array<UserOnline>>;
   newLiveMessage?: Maybe<LiveMessage>;
 };
 
 
 export type SubscriptionNewLiveMessageArgs = {
-  since?: InputMaybe<Scalars['DateTime']['input']>;
   toUserId: Scalars['ID']['input'];
 };
 
@@ -427,6 +448,19 @@ export enum Title {
   Mr = 'MR',
   Mrs = 'MRS'
 }
+
+export type UserOnline = {
+  __typename?: 'UserOnline';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  role: Role;
+};
+
+export type UserOnlineInput = {
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  role: Role;
+};
 
 export type Vehicule = {
   __typename?: 'Vehicule';
@@ -493,6 +527,21 @@ export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMeQuery = { __typename?: 'Query', me?: { __typename?: 'Account', id: string, role: Role, firstName: string, lastName: string } | null };
 
+export type GetLiveMessagesQueryVariables = Exact<{
+  customerId: Scalars['ID']['input'];
+  customerServiceId: Scalars['ID']['input'];
+}>;
+
+
+export type GetLiveMessagesQuery = { __typename?: 'Query', liveMessages?: Array<{ __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', id: string, title: Title, firstName: string, lastName: string, role: Role }, to: { __typename?: 'Account', id: string, title: Title, firstName: string, lastName: string, role: Role } }> | null };
+
+export type GetUserOnlineQueryVariables = Exact<{
+  role: Role;
+}>;
+
+
+export type GetUserOnlineQuery = { __typename?: 'Query', usersOnline?: Array<{ __typename?: 'UserOnline', id: string, name: string, role: Role }> | null };
+
 export type RegisterCustomerMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -515,12 +564,30 @@ export type SendMessageMutationVariables = Exact<{
 
 export type SendMessageMutation = { __typename?: 'Mutation', sendLiveMessage?: { __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', firstName: string }, to: { __typename?: 'Account', firstName: string } } | null };
 
+export type SetUserOnlineMutationVariables = Exact<{
+  user: UserOnlineInput;
+  online: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetUserOnlineMutation = { __typename?: 'Mutation', setUserOnline?: { __typename?: 'OperationResult', message: string } | null };
+
 export type MessageSubSubscriptionVariables = Exact<{
   to: Scalars['ID']['input'];
 }>;
 
 
-export type MessageSubSubscription = { __typename?: 'Subscription', newLiveMessage?: { __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', firstName: string }, to: { __typename?: 'Account', firstName: string } } | null };
+export type MessageSubSubscription = { __typename?: 'Subscription', newLiveMessage?: { __typename?: 'LiveMessage', at?: any | null, content: string, from: { __typename?: 'Account', id: string, firstName: string, lastName: string }, to: { __typename?: 'Account', id: string, firstName: string, lastName: string } } | null };
+
+export type OnlineCustomerSubSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnlineCustomerSubSubscription = { __typename?: 'Subscription', customersOnline?: Array<{ __typename?: 'UserOnline', id: string, name: string, role: Role }> | null };
+
+export type OnlineCustomerServiceSubSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnlineCustomerServiceSubSubscription = { __typename?: 'Subscription', customerServiceOnline?: Array<{ __typename?: 'UserOnline', id: string, name: string, role: Role }> | null };
 
 export const GetAllAccountsDocument = gql`
     query GetAllAccounts {
@@ -613,6 +680,59 @@ export const GetMeDocument = gql`
       super(apollo);
     }
   }
+export const GetLiveMessagesDocument = gql`
+    query GetLiveMessages($customerId: ID!, $customerServiceId: ID!) {
+  liveMessages(customerId: $customerId, customerServiceId: $customerServiceId) {
+    from {
+      id
+      title
+      firstName
+      lastName
+      role
+    }
+    to {
+      id
+      title
+      firstName
+      lastName
+      role
+    }
+    at
+    content
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetLiveMessagesGQL extends Apollo.Query<GetLiveMessagesQuery, GetLiveMessagesQueryVariables> {
+    document = GetLiveMessagesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetUserOnlineDocument = gql`
+    query GetUserOnline($role: Role!) {
+  usersOnline(role: $role) {
+    id
+    name
+    role
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetUserOnlineGQL extends Apollo.Query<GetUserOnlineQuery, GetUserOnlineQueryVariables> {
+    document = GetUserOnlineDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const RegisterCustomerDocument = gql`
     mutation RegisterCustomer($email: String!, $password: String!, $title: Title!, $lastName: String!, $firstName: String!, $birthDate: Date!, $address: NewAddressInput!) {
   registerCustomer(
@@ -658,16 +778,38 @@ export const SendMessageDocument = gql`
       super(apollo);
     }
   }
+export const SetUserOnlineDocument = gql`
+    mutation SetUserOnline($user: UserOnlineInput!, $online: Boolean!) {
+  setUserOnline(user: $user, online: $online) {
+    message
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SetUserOnlineGQL extends Apollo.Mutation<SetUserOnlineMutation, SetUserOnlineMutationVariables> {
+    document = SetUserOnlineDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const MessageSubDocument = gql`
     subscription MessageSub($to: ID!) {
   newLiveMessage(toUserId: $to) {
     at
     content
     from {
+      id
       firstName
+      lastName
     }
     to {
+      id
       firstName
+      lastName
     }
   }
 }
@@ -678,6 +820,46 @@ export const MessageSubDocument = gql`
   })
   export class MessageSubGQL extends Apollo.Subscription<MessageSubSubscription, MessageSubSubscriptionVariables> {
     document = MessageSubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const OnlineCustomerSubDocument = gql`
+    subscription OnlineCustomerSub {
+  customersOnline {
+    id
+    name
+    role
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class OnlineCustomerSubGQL extends Apollo.Subscription<OnlineCustomerSubSubscription, OnlineCustomerSubSubscriptionVariables> {
+    document = OnlineCustomerSubDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const OnlineCustomerServiceSubDocument = gql`
+    subscription OnlineCustomerServiceSub {
+  customerServiceOnline {
+    id
+    name
+    role
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class OnlineCustomerServiceSubGQL extends Apollo.Subscription<OnlineCustomerServiceSubSubscription, OnlineCustomerServiceSubSubscriptionVariables> {
+    document = OnlineCustomerServiceSubDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

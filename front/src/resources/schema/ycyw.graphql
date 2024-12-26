@@ -41,6 +41,35 @@ query GetMe {
   }
 }
 
+query GetLiveMessages($customerId: ID!, $customerServiceId: ID!) {
+  liveMessages(customerId: $customerId, customerServiceId: $customerServiceId) {
+    from {
+      id
+      title
+      firstName
+      lastName
+      role
+    }
+    to {
+      id
+      title
+      firstName
+      lastName
+      role
+    }
+    at
+    content
+  }
+}
+
+query GetUserOnline($role: Role!) {
+  usersOnline(role: $role) {
+    id
+    name
+    role
+  }
+}
+
 
 mutation RegisterCustomer( $email: String!, $password: String!, $title: Title!,  $lastName: String!, $firstName: String!, $birthDate: Date!, $address: NewAddressInput!) {
   registerCustomer(
@@ -63,15 +92,43 @@ mutation SendMessage($from: ID!, $to: ID!, $content: String!) {
   }
 }
 
+mutation SetUserOnline($user: UserOnlineInput!, $online: Boolean!) {
+  setUserOnline(user: $user, online: $online) {
+    message
+  }
+}
+
+
+
 subscription MessageSub($to: ID!) {
   newLiveMessage(toUserId: $to) {
     at
     content
     from {
+      id
       firstName
+      lastName
     }
     to {
+      id
       firstName
+      lastName
     }
   }
+}
+
+subscription OnlineCustomerSub {
+    customersOnline {
+      id
+      name
+      role
+    }
+}
+
+subscription OnlineCustomerServiceSub {
+    customerServiceOnline {
+      id
+      name
+      role
+    }
 }

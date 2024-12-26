@@ -1,1 +1,41 @@
-<p>live-chat works!</p>
+<div class="live-chat">
+    <mat-nav-list class="users-online" color="primary">
+        @for(user of users; track user.id) {
+            <a mat-list-item (click)="onChatUserClick(user)" [activated]="to==user">
+            @if(user.role=="CUSTOMER_SERVICE") {
+                <mat-icon>support_agent</mat-icon>
+            }
+            @else {
+              <mat-icon>person</mat-icon>
+            }
+              {{ user.name}}
+            </a>
+        }
+    </mat-nav-list>
+    <div class="discussion">
+    @if(to != null) {
+        <div class="message-list">
+            @for(message of messages; track message.at) {
+            <mat-card color="tertiary" appearance="outlined" class="custom-mat-card" [class.incoming]="message.from.id == to.id"
+            [class.outgoing]="message.from.id != to.id"
+            >
+                <mat-card-header class="from-header">
+                    <span>{{message.from.firstName}} {{message.from.lastName}}</span>
+                    <span i18n>wrote at</span>
+                    <span>{{message.at | date:'hh:mm'}}</span>
+                </mat-card-header>
+                <mat-card-content>
+                    {{message.content}}
+                </mat-card-content>
+            </mat-card>
+            }
+        </div>
+        <form class="message-form" [formGroup]="form" (ngSubmit)="submit()">
+            <mat-form-field appearance="outline" class="w100p">
+                <input matInput placeholder="" formControlName="message" autofocus>
+            </mat-form-field>
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid" i18n>Send</button>
+        </form>
+    }
+    </div>
+</div>
