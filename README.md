@@ -1,15 +1,17 @@
 # your-car-your-way
 
-This is a *Proof of Concept* to demonstrate Synchronous message exchange between the customers and the customer service staff for the application **Your Car Your Way** through a customer service chat box.
+This is a *Proof of Concept* to demonstrate Synchronous message exchange between the customers and the customer service staff for the application **Your Car Your Way** through a customer service live chat.
 
 ## Technologies
 
 - Java 21
+- Webflux
 - Netflix DGS
 - JWT
 - Angular 19
 - Apollo
 - Material angular
+- Postgres 17.2
 
 
 ## RSA keys:
