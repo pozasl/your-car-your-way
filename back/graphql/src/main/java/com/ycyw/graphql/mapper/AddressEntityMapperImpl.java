@@ -6,6 +6,9 @@ import com.ycyw.graphql.entity.AddressEntity;
 import com.ycyw.graphql.generated.types.Address;
 import com.ycyw.graphql.generated.types.NewAddressInput;
 
+/**
+ * AddressEntityMapper implementation 
+ */
 @Component
 public class AddressEntityMapperImpl implements AddressEntityMapper {
 

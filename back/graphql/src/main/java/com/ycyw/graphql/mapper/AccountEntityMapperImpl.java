@@ -11,6 +11,9 @@ import com.ycyw.graphql.generated.types.NewCustomerAccountInput;
 import com.ycyw.graphql.generated.types.Role;
 import com.ycyw.graphql.generated.types.Account;
 
+/**
+ * AccountEntity mapper implementation
+ */
 @Component
 public class AccountEntityMapperImpl implements AccountEntityMapper{
 

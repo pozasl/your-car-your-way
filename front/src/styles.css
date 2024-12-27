@@ -22,15 +22,14 @@ body {
   margin: 1em;
 }
 
-.register .form-flex-container {
+.form-flex-container form.auth-form  {
   max-width: 20em;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   flex-wrap: wrap;
-  row-gap: 2em;
-  column-gap: 2em;
+
 }
 
 .formflex-container>* {
@@ -39,7 +38,7 @@ body {
 }
 
 .logo {
-  width: 5em;
+  width: 20em;
 }
 
 .w100p {

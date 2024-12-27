@@ -9,6 +9,9 @@ import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
+/**
+ * LiveMessagePublisher implementation
+ */
 @Component
 public class LiveMessagePublisherImpl implements LiveMessagePublisher{
 

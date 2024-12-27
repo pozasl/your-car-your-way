@@ -74,7 +74,7 @@ public class AuthenticationDataFetcher {
     @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Me)
     @PreAuthorize("isAuthenticated()")
     public Mono<Account> getMe() {
-        // No @AuthenticationPrincipal param anotation  with DGS
+        // No @AuthenticationPrincipal param anotation with DGS
         return ReactiveSecurityContextHolder.getContext()
             .map(m->m.getAuthentication())
             .flatMap(auth -> accountService.getAccountByEmail(auth.getName()));

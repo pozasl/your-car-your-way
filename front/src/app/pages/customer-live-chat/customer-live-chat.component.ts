@@ -28,13 +28,11 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy {
     this.liveChatService.getUserOnline(seekRole).subscribe({
       next: users => {
         this.userOnlines = users
-        console.log("Users updated", users)
         this.subToOnlineUsersChange()
         this.subToNewMessages()
         this.setOnline()
       },
-      error: console.error,
-      complete: () => console.log("getUserOnline::complete")
+      error: console.error
     })
   }
 
@@ -48,7 +46,6 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy {
    * @param withUser 
    */
   public getMessages(withUser: UserOnline): void {
-    console.log("fetching messages from", withUser)
     this.to = withUser
     const isCustomer = withUser.role == Role.Customer
     const customerId = isCustomer ? withUser.id : this.sessionService.account!.id
@@ -65,7 +62,6 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy {
    * @param message 
    */
   public sendMessage(message: string) {
-    console.log("sending message", message)
     if (this.to !== undefined) {
       this.liveChatService.sendMessage(message, this.sessionService.account!.id, this.to.id).subscribe({
         next: msg => this.messages.unshift(msg as LiveMessage),
@@ -81,8 +77,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy {
   private subToOnlineUsersChange(): void {
     this.subs.push(this.liveChatService.subOnlineUsersFor(this.sessionService.account!.role).subscribe({
       next: users => this.userOnlines = users,
-      error: console.error,
-      complete: () => console.log("subOnlineUsersFor::ended")
+      error: console.error
     }))
   }
 
@@ -91,7 +86,7 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy {
    */
   private setOnline(): void {
     this.liveChatService.setOnline(this.sessionService.account!, true).subscribe({
-      next: console.log,
+      next: console.info,
       error: console.error,
     })
   }
@@ -117,16 +112,15 @@ export class CustomerLiveChatComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload')
   onBeforeUnload() {
     this.disconnectLiveChat()
-    console.log('window:beforeunload')
   }
 
   /**
-   * Disconnect from the chat and remove all subscriptions
+   * Remove all subscriptions and disconnect from the chat and 
    */
   disconnectLiveChat() {
     this.subs.forEach(sub => sub.unsubscribe())
     return this.liveChatService.setOnline(this.sessionService.account!, false).subscribe({
-      next: console.log,
+      next: console.info,
       error: console.error,
     })
   }

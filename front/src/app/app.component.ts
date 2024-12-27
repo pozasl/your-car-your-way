@@ -8,6 +8,9 @@ import { MatToolbarModule} from '@angular/material/toolbar';
 import { AsyncPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
+/**
+ * Main Application component
+ */
 @Component({
   selector: 'app-root',
   imports: [AsyncPipe, RouterOutlet, MatToolbarModule, MatIconModule, MatListModule, RouterLink, RouterLinkActive],
@@ -24,15 +27,26 @@ export class AppComponent implements OnInit {
     }
   }
 
+  /**
+   * Return logged status's observable
+   *
+   * @returns logged status's observable
+   */
   $isLogged(): Observable<boolean> {
     return this.sessionService.$logged()
   }
 
+  /**
+   * Logout user
+   */
   logout() {
     this.sessionService.logout();
     this.router.navigate(['/'])
   }
 
+  /**
+   * Resume user session if possible
+   */
   private resumeSession() {
     this.authService.getAccountFromToken(this.sessionService.token!).pipe(take(1))
     .subscribe({
