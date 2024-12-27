@@ -61,17 +61,23 @@ public class AccountServiceImpl implements AccountService {
             .map(accountMapper::entityToAccount);
     }
 
+    @Override
+    public Mono<Account> getAccountByEmail(String email) {
+        return accountRepository.findByEmail(email).map(accountMapper::entityToAccount);
+    }
+
+    /**
+     * Fetch and add the account address entity
+     *
+     * @param account
+     * @return
+     */
     private Mono<AccountEntity> getAccountAddress(AccountEntity account) {
         return addressRepository.findById(account.getAddressId())
             .map(address -> {
                 account.setAddress(address);
                 return account;
             });
-    }
-
-    @Override
-    public Mono<Account> getAccountByEmail(String email) {
-        return accountRepository.findByEmail(email).map(accountMapper::entityToAccount);
     }
 
 }

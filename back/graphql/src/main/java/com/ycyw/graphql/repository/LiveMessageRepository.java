@@ -10,13 +10,21 @@ import reactor.core.publisher.Mono;
 
 public interface LiveMessageRepository extends ReactiveCrudRepository<LiveMessageEntity, String>{
 
+    /**
+     * Find live message by Id
+     * @param id
+     * @return
+     */
     Mono<LiveMessageEntity> findById(Long id);
 
-    Flux<LiveMessageEntity> findByFromUserId(long fromUserId);
-
-    Flux<LiveMessageEntity> findByFromUserIdAndToUserId(long fromUserId, long toUserId);
-
+    /**
+     * Find live messages exchanged between users by their user id by desc order
+     *
+     * @param user1Id A user id
+     * @param user2Id The other user id
+     * @return List of live messages as Flux
+     */
     @Query("SELECT * FROM live_message WHERE from_user_id in (:user1Id, :user2Id) and to_user_id in (:user2Id, :user1Id) ORDER BY id DESC")
-    Flux<LiveMessageEntity> findBeetwenUsersOrderById(long user1Id, long user2Id);
+    Flux<LiveMessageEntity> findBeetwenUsersOrderByIdDesc(long user1Id, long user2Id);
     
 }

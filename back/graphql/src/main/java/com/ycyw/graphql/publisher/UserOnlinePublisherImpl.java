@@ -14,6 +14,9 @@ import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
+/**
+ * UserOnlinePublisher implementation
+ */
 @Component
 public class UserOnlinePublisherImpl implements UserOnlinePublisher {
 
@@ -49,6 +52,12 @@ public class UserOnlinePublisherImpl implements UserOnlinePublisher {
         return Flux.fromIterable(filterUsersByRole(userOnlines, role));
     }
 
+    /**
+     * Filter users online by their role
+     * @param users The users online
+     * @param role The role
+     * @return The filtered users
+     */
     private ArrayList<UserOnline> filterUsersByRole(List<UserOnline> users, Role role) {
         ArrayList<UserOnline> tmp = new ArrayList<>(users);
         tmp.removeIf(user -> !user.getRole().equals(role));

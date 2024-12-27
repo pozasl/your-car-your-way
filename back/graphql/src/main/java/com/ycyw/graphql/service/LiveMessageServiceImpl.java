@@ -49,13 +49,6 @@ public class LiveMessageServiceImpl implements LiveMessageService {
     }
 
     @Override
-    public Flux<LiveMessage> getMessageFromUserId(String accountId) {
-        return messageRepository.findByFromUserId(Long.parseLong(accountId))
-                .flatMap(this::addAccountsToMessage)
-                .map(messageMapper::entityToLiveMessage);
-    }
-
-    @Override
     public Mono<LiveMessage> addMessage(LiveMessageInput message) {
         return Mono.zip(
                 accountRepository.findById(Long.parseLong(message.getFromUserId())),
@@ -65,29 +58,6 @@ public class LiveMessageServiceImpl implements LiveMessageService {
                 .doOnNext(msg -> {
                     messagePublisher.next(msg);
                 });
-    }
-
-    private Mono<LiveMessageEntity> addUsersWithMessage(Tuple2<AccountEntity, AccountEntity> accounts,
-            LiveMessageEntity message) {
-        return messageRepository.save(message)
-                .flatMap(savedMsg -> messageRepository.findById(savedMsg.getId()))
-                .map(msgEntity -> {
-                    msgEntity.setFromUser(accounts.getT1());
-                    msgEntity.setToUser(accounts.getT2());
-                    return msgEntity;
-                });
-
-    }
-
-    private Mono<LiveMessageEntity> addAccountsToMessage(LiveMessageEntity message) {
-        return Mono.zip(
-            accountRepository.findById(message.getFromUserId()),
-            accountRepository.findById(message.getToUserId()))
-            .map(t-> {
-                message.setFromUser(t.getT1());
-                message.setToUser(t.getT2());
-                return message;
-            });
     }
 
     @Override
@@ -107,9 +77,45 @@ public class LiveMessageServiceImpl implements LiveMessageService {
 
     @Override
     public Flux<LiveMessage> getMessageBetween(String account1Id, String account2Id) {
-        return this.messageRepository.findBeetwenUsersOrderById(Long.parseLong(account1Id), Long.parseLong(account2Id))
-        .flatMap(this::addAccountsToMessage)
-        .map(messageMapper::entityToLiveMessage);
+        return this.messageRepository
+                .findBeetwenUsersOrderByIdDesc(Long.parseLong(account1Id), Long.parseLong(account2Id))
+                .flatMap(this::addAccountsToMessage)
+                .map(messageMapper::entityToLiveMessage);
+    }
+
+    /**
+     * Fetch and add account entities to live message entity before recording
+     *
+     * @param accounts A tuple with both from/to account
+     * @param message The message entity
+     * @return The message entity completed with account entities
+     */
+    private Mono<LiveMessageEntity> addUsersWithMessage(Tuple2<AccountEntity, AccountEntity> accounts,
+            LiveMessageEntity message) {
+        return messageRepository.save(message)
+                .flatMap(savedMsg -> messageRepository.findById(savedMsg.getId()))
+                .map(msgEntity -> {
+                    msgEntity.setFromUser(accounts.getT1());
+                    msgEntity.setToUser(accounts.getT2());
+                    return msgEntity;
+                });
+
+    }
+
+    /**
+     * Fetch and add misssing account entities to live message entity
+     * @param message the message entity
+     * @return Completed message entity with missing accounts entities
+     */
+    private Mono<LiveMessageEntity> addAccountsToMessage(LiveMessageEntity message) {
+        return Mono.zip(
+                accountRepository.findById(message.getFromUserId()),
+                accountRepository.findById(message.getToUserId()))
+                .map(t -> {
+                    message.setFromUser(t.getT1());
+                    message.setToUser(t.getT2());
+                    return message;
+                });
     }
 
 }

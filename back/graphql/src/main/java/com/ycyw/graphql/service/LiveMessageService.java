@@ -31,14 +31,6 @@ public interface LiveMessageService {
      * @param accountId User's account id
      * @return All live messages Flux
      */
-    Flux<LiveMessage> getMessageFromUserId(String accountId);
-
-    /**
-     * Get user' messages
-     * 
-     * @param accountId User's account id
-     * @return All live messages Flux
-     */
     Flux<LiveMessage> getMessageBetween(String account1Id, String account2Id);
 
     /**
