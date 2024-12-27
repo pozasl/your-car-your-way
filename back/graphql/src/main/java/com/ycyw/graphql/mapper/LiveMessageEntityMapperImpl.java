@@ -8,6 +8,9 @@ import com.ycyw.graphql.entity.LiveMessageEntity;
 import com.ycyw.graphql.generated.types.LiveMessage;
 import com.ycyw.graphql.generated.types.LiveMessageInput;
 
+/**
+ * LiveMessageEntityMapper implementation
+ */
 @Component
 public class LiveMessageEntityMapperImpl implements LiveMessageEntityMapper{
 

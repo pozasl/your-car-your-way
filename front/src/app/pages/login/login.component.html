@@ -4,18 +4,18 @@
 <div class="auth">
     <div class="form-flex-container">
         <img class="logo" src="/assets/ycyw_logo.png" alt="logo" />
-        <h1>Se connecter</h1>
+        <h1 i18n>Login</h1>
         <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
             <mat-form-field appearance="outline" class="w100p">
-                <mat-label>E-mail ou nom d'utilisateur</mat-label>
+                <mat-label i18n>E-mail</mat-label>
                 <input matInput placeholder="Email" formControlName="email">
             </mat-form-field>
             <mat-form-field appearance="outline" class="w100p">
-                <mat-label>Mot de passe</mat-label>
+                <mat-label i18n>Password</mat-label>
                 <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password" formControlName="password">
                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </mat-form-field>
-            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">Se connecter</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid" i18n>Submit</button>
         </form>
     </div>
 </div>
