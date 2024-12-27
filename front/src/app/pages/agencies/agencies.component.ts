@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+/**
+ * Agencies list page component
+ */
 @Component({
   selector: 'app-agencies',
   imports: [],

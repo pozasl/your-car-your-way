@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserAccount } from '../models/UserAccount';
 
+/**
+ * User session service
+ */
 @Injectable({
   providedIn: 'root'
 })

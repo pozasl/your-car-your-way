@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+/**
+ * Rental offers page component
+ */
 @Component({
   selector: 'app-offers',
   imports: [],
