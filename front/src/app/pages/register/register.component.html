@@ -1,7 +1,7 @@
 <button mat-icon-button routerLink="/">
     <mat-icon>arrow_back</mat-icon>
 </button>
-<div class="register">
+<div class="auth">
     <div class="form-flex-container">
         <img class="logo" src="/assets/ycyw_logo.png" alt="logo" />
         <h1 i18n>Register</h1>
@@ -25,7 +25,6 @@
             <mat-form-field appearance="outline" class="w100p">
                 <mat-label i18n>Date of birth</mat-label>
                 <input matInput [matDatepicker]="picker" formControlName="birthDate">
-                <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -38,7 +37,7 @@
                 <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password" formControlName="password">
                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </mat-form-field>
-            <h2 i18n>Postal address</h2>
+            <h3 i18n>Postal address</h3>
             <mat-form-field appearance="outline" class="w100p">
                 <mat-label i18n>Address</mat-label>
                 <input matInput placeholder="Street name" formControlName="street">
