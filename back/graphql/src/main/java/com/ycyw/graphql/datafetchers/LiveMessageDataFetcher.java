@@ -51,7 +51,6 @@ public class LiveMessageDataFetcher {
     // @PreAuthorize("isAuthenticated()")
     @DgsSubscription(field = SUBSCRIPTION.NewLiveMessage)
     public Publisher<LiveMessage> newLiveMessage(@InputArgument("toUserId") String toUserId) {
-        System.out.println(String.format("-> user %s subs to messages", toUserId));
         return messageService.getLiveMessagePublisher(toUserId);
     }
 
@@ -87,7 +86,6 @@ public class LiveMessageDataFetcher {
     @PreAuthorize("isAuthenticated()")
     @DgsMutation(field = MUTATION.SendLiveMessage)
     public Mono<LiveMessage> SendLiveMessage(@InputArgument("message") LiveMessageInput message) {
-        System.out.println(String.format("-> in coming message from %s", message.getFromUserId()));
         return messageService.addMessage(message);
     }
 

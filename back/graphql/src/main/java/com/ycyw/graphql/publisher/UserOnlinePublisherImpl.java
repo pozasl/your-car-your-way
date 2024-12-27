@@ -36,9 +36,7 @@ public class UserOnlinePublisherImpl implements UserOnlinePublisher {
         } else {
             userOnlines.remove(user);
         }
-        // userOnlines.forEach(u -> System.out.println(String.format("== [%s]", u.getId())));
         usersStream.next(userOnlines);
-
     }
 
     @Override
