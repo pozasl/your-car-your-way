@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS reservation (
 -- Payment table
 CREATE TABLE IF NOT EXISTS payment (
     id BIGSERIAL PRIMARY KEY,
-    invoice_id BIGINT REFERENCES invoice(id)
+    invoice_num BIGINT REFERENCES invoice(num)
     price NUMERIC(9,2),
     currency VARCHAR(2) CHECK (currency IN ('$', '€', '£'))
 );
@@ -116,5 +116,6 @@ CREATE TABLE IF NOT EXISTS invoice (
     name VARCHAR(50),
     address VARCHAR(255),
     amount NUMERIC(9,2),
-    currency VARCHAR(2) CHECK (currency IN ('$', '€', '£'))
+    currency VARCHAR(2) CHECK (currency IN ('$', '€', '£')),
+    reservation_id BIGINT REFERENCES reservation(id)
 );
