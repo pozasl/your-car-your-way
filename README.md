@@ -51,7 +51,7 @@ POSTGRES_HOSTNAME: postgresdb
 
 ### Setting up Database:
 
-After installing postgres and creating a *postgres* user and database with all rights granted, initialize the tables as follow:
+After installing postgres and creating a *postgres* user and database with all rights granted, initialize the tables as follow using the [SQL script](.devcontainer/postgres-entrypoint-initdb.d/01-schema.sql):
 
 ``` bash
 psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f .devcontainer/postgres-entrypoint-initdb.d/01-schema.sql
