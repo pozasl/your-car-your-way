@@ -112,11 +112,20 @@ CREATE TABLE IF NOT EXISTS refund (
 );
 
 -- Rental offer search view
-CREATE VIEW IF NOT EXISTS rental_offer_vw AS
+DROP VIEW IF EXISTS rental_offer_vw;
+
+CREATE VIEW rental_offer_vw AS
 SELECT ag.id, ag.name,  ad.city, ve.category, op.week_day, op.close_at, op.open_at
 FROM agency ag
 LEFT JOIN address ad on ag.address_id=ad.id
 LEFT JOIN opening op ON op.agency_id=ag.id
 LEFT JOIN vehicule ve ON ve.agency_id=ag.id
-where ve.available ;
-GROUP BY ag.id, ad.city,  ve.category;
+WHERE ve.available
+GROUP BY ag.id, ad.city, op.week_day, op.close_at, op.open_at, ve.category;
+
+-- Usage
+SELECT * from rental_offer_vw
+WHERE city='PARIS'
+AND week_day=1 -- Monday
+AND ('09:30:00' BETWEEN  open_at AND  close_at)
+AND category = 'V'
