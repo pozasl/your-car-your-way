@@ -110,3 +110,13 @@ CREATE TABLE IF NOT EXISTS refund (
     currency VARCHAR(2) CHECK (currency IN ('$', '€', '£')),
     payment_id BIGINT REFERENCES payment(id) NOT NULL
 );
+
+-- Rental offer search view
+CREATE VIEW IF NOT EXISTS rental_offer_vw AS
+SELECT ag.id, ag.name,  ad.city, ve.category, op.week_day, op.close_at, op.open_at
+FROM agency ag
+LEFT JOIN address ad on ag.address_id=ad.id
+LEFT JOIN opening op ON op.agency_id=ag.id
+LEFT JOIN vehicule ve ON ve.agency_id=ag.id
+where ve.available ;
+GROUP BY ag.id, ad.city,  ve.category;
