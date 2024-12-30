@@ -54,7 +54,8 @@ public class SecurityConfig {
                 .authorizeExchange(ex -> ex
                         .pathMatchers(
                                 "/graphql",
-                                "/graphiql")
+                                "/graphiql",
+                                "/signaling")
                         .permitAll()
                         .anyExchange().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
