@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GetLiveMessagesGQL, GetUserOnlineGQL, LiveMessage, MessageSubGQL, OnlineCustomerServiceSubGQL, OnlineCustomerSubGQL, Role, SendMessageGQL, SetUserOnlineGQL, UserOnline, UserOnlineInput } from '../core/modules/graphql/generated';
 import { UserAccount } from '../models/UserAccount';
-import { map, Observable, take } from 'rxjs';
+import { from, map, Observable, take } from 'rxjs';
 
 /**
  * LiveChat service to manage users online and messages
@@ -44,7 +44,10 @@ export class LiveChatService {
    * @returns Filtered users online list
    */
   getUserOnline(role: Role): Observable<UserOnline[]> {
-    return this.usersOnline.watch({role: role}).valueChanges.pipe(take(1), map(result => result.data!.usersOnline!))
+    // This request is cached by Apollo
+    // return this.usersOnline.watch({role: role}).valueChanges.pipe(take(1), map(result => result.data!.usersOnline!))
+    return from(this.usersOnline.watch({role: role}).setOptions({fetchPolicy: 'no-cache'})).pipe(map(r => r.data!.usersOnline!))
+
   }
 
   /**
@@ -67,7 +70,11 @@ export class LiveChatService {
    * @returns Live messages exchanged
    */
   getMessages(customerId: string, customerServiceId: string): Observable<LiveMessage[]> {
-    return this.getLivesMessages.watch({customerId, customerServiceId}).valueChanges.pipe(take(1),map(result => result.data!.liveMessages!.map(m => m as LiveMessage)))
+    // This request is cached by Apollo
+    // return this.getLivesMessages.watch({customerId, customerServiceId}).valueChanges.pipe(take(1),map(result => result.data!.liveMessages!.map(m => m as LiveMessage)))
+    //
+    return from(this.getLivesMessages.watch({customerId, customerServiceId}).setOptions({fetchPolicy: 'no-cache'})).pipe(map(r => r.data!.liveMessages!.map(m => m as LiveMessage)))
+    
   }
 
   /**
