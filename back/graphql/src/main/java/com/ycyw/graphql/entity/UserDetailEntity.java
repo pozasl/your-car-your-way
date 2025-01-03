@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ycyw.graphql.generated.types.Role;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -18,7 +18,7 @@ import lombok.NonNull;
  * Extended User Detail entity
  */
 @Data
-@AllArgsConstructor
+@Builder
 public class UserDetailEntity implements UserDetails {
 
     @Id
@@ -29,7 +29,6 @@ public class UserDetailEntity implements UserDetails {
     private String password;
     @NonNull
     private Role role;
-    
 
 
     @Override
