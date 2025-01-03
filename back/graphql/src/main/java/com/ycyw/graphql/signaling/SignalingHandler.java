@@ -5,20 +5,14 @@ import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 
-import lombok.Builder;
-import lombok.Data;
 import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 
-@Data
-@Builder
-class SignalMessage {
-    private String content;
-    private String sessionId;
-}
-
+/**
+ * Simple reactive Signaling handler implementation for WebRTC 
+ */
 @Component("SignalingHandler")
 public class SignalingHandler implements WebSocketHandler {
 
