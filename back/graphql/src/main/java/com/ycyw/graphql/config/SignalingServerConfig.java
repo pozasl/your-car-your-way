@@ -26,7 +26,7 @@ public class SignalingServerConfig {
         Map<String, WebSocketHandler> map = new HashMap<>();
         map.put("/signaling", webSocketHandler);
         SimpleUrlHandlerMapping handlerMapping = new SimpleUrlHandlerMapping();
-        handlerMapping.setOrder(-1);
+        handlerMapping.setOrder(1);
         handlerMapping.setUrlMap(map);
         return handlerMapping;
     }

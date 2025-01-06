@@ -1,9 +1,5 @@
 package com.ycyw.graphql.datafetchers;
 
-import com.ycyw.graphql.generated.DgsConstants.QUERY;
-import com.ycyw.graphql.generated.DgsConstants;
-import com.ycyw.graphql.generated.DgsConstants.MUTATION;
-import com.ycyw.graphql.generated.DgsConstants.SUBSCRIPTION;
 import com.ycyw.graphql.generated.types.LiveMessage;
 import com.ycyw.graphql.generated.types.LiveMessageInput;
 import com.ycyw.graphql.generated.types.OperationResult;
@@ -19,18 +15,17 @@ import java.util.List;
 import org.reactivestreams.Publisher;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsData;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.DgsSubscription;
-import com.netflix.graphql.dgs.InputArgument;
+import org.springframework.stereotype.Controller;
 
 /**
  * Live message graphql data fetcher for live chat
  */
-@DgsComponent
+@Controller
 public class LiveMessageDataFetcher {
 
     private final LiveMessageService messageService;
@@ -48,9 +43,9 @@ public class LiveMessageDataFetcher {
      * @param toUserId
      * @return
      */
-    // @PreAuthorize("isAuthenticated()")
-    @DgsSubscription(field = SUBSCRIPTION.NewLiveMessage)
-    public Publisher<LiveMessage> newLiveMessage(@InputArgument("toUserId") String toUserId) {
+    @PreAuthorize("isAuthenticated()")
+    @SubscriptionMapping
+    public Publisher<LiveMessage> newLiveMessage(@Argument String toUserId) {
         return messageService.getLiveMessagePublisher(toUserId);
     }
 
@@ -60,7 +55,7 @@ public class LiveMessageDataFetcher {
      * @return
      */
     // @PreAuthorize("hasRole('CUSTOMER')")
-    @DgsSubscription(field = SUBSCRIPTION.CustomerServiceOnline)
+    @SubscriptionMapping
     public Publisher<List<UserOnline>> customerServiceOnline() {
         return messageService.getUserOnlinePublisher(Role.CUSTOMER_SERVICE);
     }
@@ -72,7 +67,7 @@ public class LiveMessageDataFetcher {
      * @return
      */
     // @PreAuthorize("hasRole('CUSTOMER_SERVICE')")
-    @DgsSubscription(field = SUBSCRIPTION.CustomersOnline)
+    @SubscriptionMapping
     public Publisher<List<UserOnline>> customerOnline() {
         return messageService.getUserOnlinePublisher(Role.CUSTOMER);
     }
@@ -84,8 +79,8 @@ public class LiveMessageDataFetcher {
      * @return
      */
     @PreAuthorize("isAuthenticated()")
-    @DgsMutation(field = MUTATION.SendLiveMessage)
-    public Mono<LiveMessage> SendLiveMessage(@InputArgument("message") LiveMessageInput message) {
+    @MutationMapping
+    public Mono<LiveMessage> SendLiveMessage(@Argument LiveMessageInput message) {
         return messageService.addMessage(message);
     }
 
@@ -97,8 +92,8 @@ public class LiveMessageDataFetcher {
      * @return
      */
     @PreAuthorize("isAuthenticated()")
-    @DgsMutation(field = MUTATION.SetUserOnline)
-    public Mono<OperationResult> setUserOnline(@InputArgument("user") UserOnline user, @InputArgument("online") Boolean online) {
+    @MutationMapping
+    public Mono<OperationResult> setUserOnline(@Argument UserOnline user, @Argument Boolean online) {
         messageService.setUserOnline(user, online);
         String msg = online ? "joined" : "leaved";
         return Mono.just(OperationResult.newBuilder().message(String.format("User %s %s", user.getName(), msg)).build());
@@ -110,8 +105,8 @@ public class LiveMessageDataFetcher {
      * @return Filtered Online Users flux
      */
     @PreAuthorize("isAuthenticated()")
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.UsersOnline)
-    public Flux<UserOnline> getUsersOnline(@InputArgument("role") Role role) {
+    @QueryMapping
+    public Flux<UserOnline> getUsersOnline(@Argument Role role) {
         return messageService.getUsersOnlineWithRole(role);
     }
 
@@ -124,10 +119,9 @@ public class LiveMessageDataFetcher {
      * @return The messages list
      */
     @PreAuthorize("isAuthenticated()")
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.LiveMessages)
-    public Flux<LiveMessage> getLiveMessages(@InputArgument("customerId") String customerId, @InputArgument("customerServiceId") String customerServiceId) {
+    @QueryMapping
+    public Flux<LiveMessage> getLiveMessages(@Argument String customerId, @Argument String customerServiceId) {
         return messageService.getMessageBetween(customerId, customerServiceId);
     }
-
 
 }

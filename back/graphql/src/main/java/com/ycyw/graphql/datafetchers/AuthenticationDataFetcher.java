@@ -1,17 +1,13 @@
 package com.ycyw.graphql.datafetchers;
 
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.stereotype.Controller;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.DgsData;
-import com.netflix.graphql.dgs.InputArgument;
-import com.ycyw.graphql.generated.DgsConstants;
-import com.ycyw.graphql.generated.DgsConstants.MUTATION;
-import com.ycyw.graphql.generated.DgsConstants.QUERY;
 import com.ycyw.graphql.generated.types.Account;
 import com.ycyw.graphql.generated.types.AccountCredentials;
 import com.ycyw.graphql.generated.types.NewCustomerAccountInput;
@@ -25,7 +21,7 @@ import reactor.core.publisher.Mono;
 /**
  * Authentication's Datafetcher
  */
-@DgsComponent
+@Controller
 public class AuthenticationDataFetcher {
 
     private AccountService accountService;
@@ -45,8 +41,8 @@ public class AuthenticationDataFetcher {
      * @param account
      * @return The register operation's result
      */
-    @DgsMutation(field = MUTATION.RegisterCustomer)
-    public Mono<OperationResult> registerCustomer(@InputArgument("account") NewCustomerAccountInput account) {
+    @MutationMapping
+    public Mono<OperationResult> registerCustomer(@Argument NewCustomerAccountInput account) {
         return accountService.createAccount(account)
                 .then(Mono.just(OperationResult.newBuilder().message("Account registered").build()));
     }
@@ -57,10 +53,8 @@ public class AuthenticationDataFetcher {
      * @param credentials The account's credentials
      * @return A JWT token
      */
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Token)
-    public Mono<String> getToken(
-            @InputArgument("credentials") AccountCredentials credentials,
-            @RequestHeader("Content-Type") String contentType) {
+    @QueryMapping
+    public Mono<String> token(@Argument AccountCredentials credentials) {
         return authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()))
                 .map(jwtService::generateToken);
@@ -71,9 +65,9 @@ public class AuthenticationDataFetcher {
      * 
      * @return Account info
      */
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Me)
+    @QueryMapping
     @PreAuthorize("isAuthenticated()")
-    public Mono<Account> getMe() {
+    public Mono<Account> me() {
         // No @AuthenticationPrincipal param anotation with DGS
         return ReactiveSecurityContextHolder.getContext()
             .map(m->m.getAuthentication())
