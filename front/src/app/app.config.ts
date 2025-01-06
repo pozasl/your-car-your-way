@@ -28,7 +28,6 @@ export const appConfig: ApplicationConfig = {
       const ws = new GraphQLWsLink(
         createClient({
           url: '/graphql',
-          
           connectionParams: () => ({
             Authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
           })
