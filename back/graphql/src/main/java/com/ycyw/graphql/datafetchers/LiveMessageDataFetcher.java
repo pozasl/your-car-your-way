@@ -104,7 +104,7 @@ public class LiveMessageDataFetcher {
      */
     @PreAuthorize("isAuthenticated()")
     @QueryMapping
-    public Flux<UserOnline> getUsersOnline(@Argument Role role) {
+    public Flux<UserOnline> usersOnline(@Argument Role role) {
         return messageService.getUsersOnlineWithRole(role);
     }
 
@@ -118,7 +118,7 @@ public class LiveMessageDataFetcher {
      */
     @PreAuthorize("isAuthenticated()")
     @QueryMapping
-    public Flux<LiveMessage> getLiveMessages(@Argument String customerId, @Argument String customerServiceId) {
+    public Flux<LiveMessage> liveMessages(@Argument String customerId, @Argument String customerServiceId) {
         return messageService.getMessageBetween(customerId, customerServiceId);
     }
 
