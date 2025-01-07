@@ -1,9 +1,13 @@
 package com.ycyw.graphql.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.graphql.server.WebSocketGraphQlInterceptor;
+import org.springframework.graphql.server.support.BearerTokenAuthenticationExtractor;
+import org.springframework.graphql.server.webflux.AuthenticationWebSocketInterceptor;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -14,6 +18,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtReactiveAuthenticationManager;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 import com.nimbusds.jose.jwk.JWK;
@@ -27,6 +32,7 @@ import com.nimbusds.jose.proc.SecurityContext;
  * Security configuration.
  */
 @Configuration
+@ConditionalOnMissingClass("org.springframework.web.servlet.DispatcherServlet")
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity(useAuthorizationManager=true)
 @EnableConfigurationProperties(RsaKeyProperties.class)
@@ -61,6 +67,18 @@ public class SecurityConfig {
                 .oauth2ResourceServer((oauth2) -> oauth2
                         .jwt(Customizer.withDefaults()))
                 .build();
+    }
+
+    /**
+     * Authentification interceptor for subscription using websocket
+     * 
+     * @return
+     */
+    @Bean
+    public WebSocketGraphQlInterceptor authenticationInterceptor() {
+        return new AuthenticationWebSocketInterceptor(
+                new BearerTokenAuthenticationExtractor(),
+                new JwtReactiveAuthenticationManager(jwtDecoder()));
     }
 
     /**
