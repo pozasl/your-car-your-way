@@ -41,8 +41,6 @@ type Query {
 
 type Mutation {
     registerCustomer(account: NewCustomerAccountInput!): OperationResult
-    # updateAccount(account: CustomerAccountInput!): Void
-    # deleteAccount(account: CustomerAccountInput!): Void
     sendLiveMessage(message: LiveMessageInput!): LiveMessage
     setUserOnline(user: UserOnlineInput!, online: Boolean): OperationResult
 }
