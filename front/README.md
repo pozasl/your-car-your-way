@@ -49,10 +49,10 @@ ng generate --help
 
 ## Building
 
-To build the project run:
+To build the project with its localization run:
 
 ```bash
-ng build
+ng build --localize=true
 ```
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.

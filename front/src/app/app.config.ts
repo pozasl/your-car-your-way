@@ -28,9 +28,9 @@ export const appConfig: ApplicationConfig = {
       const ws = new GraphQLWsLink(
         createClient({
           url: '/graphql',
-          connectionParams: {
+          connectionParams: () => ({
             Authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
-          }
+          })
         }),
       )
       // Using the ability to split links, you can send data to each link

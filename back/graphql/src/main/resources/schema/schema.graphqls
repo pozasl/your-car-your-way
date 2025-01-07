@@ -41,8 +41,6 @@ type Query {
 
 type Mutation {
     registerCustomer(account: NewCustomerAccountInput!): OperationResult
-    # updateAccount(account: CustomerAccountInput!): Void
-    # deleteAccount(account: CustomerAccountInput!): Void
     sendLiveMessage(message: LiveMessageInput!): LiveMessage
     setUserOnline(user: UserOnlineInput!, online: Boolean): OperationResult
 }
@@ -110,7 +108,7 @@ input LiveMessageInput {
     content: String!
 }
 
-type Account @key(fields: "id"){
+type Account {
     id: ID!
     title: Title!
     firstName: String!
@@ -129,14 +127,14 @@ type UserOnline {
     role: Role!
 }
 
-type Agency @key(fields: "id"){
+type Agency {
     id: ID!
     name: String!
     address: Address!
     vehicules: [Vehicule]
 }
 
-type Address @key(fields: "id"){
+type Address {
     id: ID!
     street: String!
     complement: String!
@@ -146,13 +144,13 @@ type Address @key(fields: "id"){
     countryCode: String!
 }
 
-type Vehicule @key(fields: "registrationNumber"){
+type Vehicule {
     registrationNumber: String!
     category: VehiculeCategory!
     available: Boolean!
 }
 
-type VehiculeCategory @key(fields: "ref"){
+type VehiculeCategory {
     ref: VehiculeCategoryRef
     name: String!
 }

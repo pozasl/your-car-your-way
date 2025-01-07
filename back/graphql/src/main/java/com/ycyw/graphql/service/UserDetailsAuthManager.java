@@ -32,7 +32,13 @@ public class UserDetailsAuthManager implements ReactiveAuthenticationManager {
     public Mono<Authentication> authenticate(Authentication auth) {
        final String email = auth.getName();
         return accountRepository.findByEmail(email)
-            .map(account -> new UserDetailEntity(account.getId(), account.getEmail(), account.getPassword(), account.getRole()))
+            .map(account -> UserDetailEntity.builder()
+                .id(account.getId())
+                .email(account.getEmail())
+                .password(account.getPassword())
+                .role(account.getRole())
+                .build()
+            )
             .filter(user -> {
                 return passwordEncoder.matches(auth.getCredentials().toString(), user.getPassword());
             })
