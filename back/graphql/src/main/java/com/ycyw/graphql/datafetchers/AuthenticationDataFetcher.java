@@ -5,7 +5,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import com.ycyw.graphql.generated.types.Account;
@@ -67,10 +67,7 @@ public class AuthenticationDataFetcher {
      */
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
-    public Mono<Account> me() {
-        // No @AuthenticationPrincipal param anotation with DGS
-        return ReactiveSecurityContextHolder.getContext()
-            .map(m->m.getAuthentication())
-            .flatMap(auth -> accountService.getAccountByEmail(auth.getName()));
+    public Mono<Account> me(Authentication auth) {
+        return accountService.getAccountByEmail(auth.getName());
     }
 }
