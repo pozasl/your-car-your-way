@@ -35,8 +35,6 @@ public class LiveMessageDataFetcher {
         this.messageService = messageService;
     }
 
-    // TODO: Fix @PreAuthorize with @DgsSubscription
-
     /**
      * Live Chat message subscription
      *
@@ -54,7 +52,7 @@ public class LiveMessageDataFetcher {
      *
      * @return
      */
-    // @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAuthority('SCOPE_CUSTOMER')")
     @SubscriptionMapping
     public Publisher<List<UserOnline>> customerServiceOnline() {
         return messageService.getUserOnlinePublisher(Role.CUSTOMER_SERVICE);
@@ -66,9 +64,9 @@ public class LiveMessageDataFetcher {
      *
      * @return
      */
-    // @PreAuthorize("hasRole('CUSTOMER_SERVICE')")
+    @PreAuthorize("hasAuthority('SCOPE_CUSTOMER_SERVICE')")
     @SubscriptionMapping
-    public Publisher<List<UserOnline>> customerOnline() {
+    public Publisher<List<UserOnline>> customersOnline() {
         return messageService.getUserOnlinePublisher(Role.CUSTOMER);
     }
 
@@ -80,7 +78,7 @@ public class LiveMessageDataFetcher {
      */
     @PreAuthorize("isAuthenticated()")
     @MutationMapping
-    public Mono<LiveMessage> SendLiveMessage(@Argument LiveMessageInput message) {
+    public Mono<LiveMessage> sendLiveMessage(@Argument LiveMessageInput message) {
         return messageService.addMessage(message);
     }
 
