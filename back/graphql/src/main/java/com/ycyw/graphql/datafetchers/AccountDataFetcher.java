@@ -31,7 +31,7 @@ public class AccountDataFetcher {
      * @param id
      * @return
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_CUSTOMER_SERVICE')")
     @QueryMapping
     public Mono<Account> account(@Argument String id) {
         if (Strings.isBlank(id)) {
@@ -45,7 +45,7 @@ public class AccountDataFetcher {
      * 
      * @return
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_CUSTOMER_SERVICE')")
     @QueryMapping
     public Flux<Account> accounts() {
         return accountService.getAccounts();
