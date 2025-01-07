@@ -1,9 +1,6 @@
 package com.ycyw.graphql.config;
 
-import java.security.interfaces.RSAPublicKey;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -72,9 +69,11 @@ public class SecurityConfig {
                 .build();
     }
 
-
-    
-
+    /**
+     * Authentification interceptor for subscription using websocket
+     * 
+     * @return
+     */
     @Bean
     public WebSocketGraphQlInterceptor authenticationInterceptor() {
         return new AuthenticationWebSocketInterceptor(
