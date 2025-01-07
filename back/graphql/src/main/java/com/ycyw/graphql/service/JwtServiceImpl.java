@@ -1,11 +1,9 @@
 package com.ycyw.graphql.service;
 
-import java.util.stream.Collectors;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -29,16 +27,12 @@ public class JwtServiceImpl implements JwtService {
   @Override
   public String generateToken(Authentication auth) {
     UserDetailEntity userDetails = (UserDetailEntity) auth.getPrincipal();
-    String scope = auth.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.joining(" "));
+    String scope = userDetails.getRole().toString();
     return createToken(userDetails, scope, this.encoder);
   }
 
   public String generateTokenFromUserdetail(UserDetailEntity userDetails) {
-    String scope = userDetails.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.joining(" "));
+    String scope = userDetails.getRole().toString();
     return createToken(userDetails, scope , this.encoder);
   }
 
@@ -57,7 +51,7 @@ public class JwtServiceImpl implements JwtService {
   ) {
     Instant now = Instant.now();
     JwtClaimsSet claims = JwtClaimsSet.builder()
-        .issuer("MDD")
+        .issuer("YCYW")
         .issuedAt(now)
         .expiresAt(now.plus(24, ChronoUnit.HOURS))
         .subject(userDetails.getEmail())

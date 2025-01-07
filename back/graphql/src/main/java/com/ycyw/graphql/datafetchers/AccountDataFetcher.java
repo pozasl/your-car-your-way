@@ -2,16 +2,13 @@ package com.ycyw.graphql.datafetchers;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsData;
-import com.netflix.graphql.dgs.InputArgument;
-
-import com.ycyw.graphql.generated.DgsConstants;
-import com.ycyw.graphql.generated.DgsConstants.QUERY;
-import com.ycyw.graphql.service.AccountService;
 import com.ycyw.graphql.generated.types.Account;
+import com.ycyw.graphql.service.AccountService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,7 +16,7 @@ import reactor.core.publisher.Mono;
 /**
  * Account's Datafetcher
  */
-@DgsComponent
+@Controller
 public class AccountDataFetcher {
     private final AccountService accountService;
 
@@ -34,9 +31,9 @@ public class AccountDataFetcher {
      * @param id
      * @return
      */
-    @PreAuthorize("hasRole('ADMIN')")
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Account)
-    public Mono<Account> account(@InputArgument("id") String id) {
+    @PreAuthorize("hasAuthority('SCOPE_CUSTOMER_SERVICE')")
+    @QueryMapping
+    public Mono<Account> account(@Argument String id) {
         if (Strings.isBlank(id)) {
             new RuntimeException("Invalid account ID.");
         }
@@ -48,8 +45,8 @@ public class AccountDataFetcher {
      * 
      * @return
      */
-    @PreAuthorize("hasRole('ADMIN')")
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Accounts)
+    @PreAuthorize("hasAuthority('SCOPE_CUSTOMER_SERVICE')")
+    @QueryMapping
     public Flux<Account> accounts() {
         return accountService.getAccounts();
     }
