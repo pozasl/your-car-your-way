@@ -5,8 +5,8 @@ This is a *Proof of Concept* to demonstrate Synchronous message exchange between
 ## Technologies
 
 - Java 21
-- Webflux
-- Netflix DGS
+- Spring Webflux
+- Spring GraphQL
 - JWT
 - Angular 19
 - Apollo
